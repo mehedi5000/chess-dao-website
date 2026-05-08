@@ -41,12 +41,8 @@
             animation:float 5s ease-in-out infinite;
             will-change:transform;
         }
-        h1 {
-            font-size:2.8rem; background:linear-gradient(135deg,#f0dbc0,#b97f3a);
-            -webkit-background-clip:text; background-clip:text; color:transparent;
-            margin-bottom:0.5rem;
-        }
-        .tagline { font-size:1.2rem; color:#d4b48c; max-width:600px; margin:0 auto; }
+        /* Removed h1 styling as it's no longer needed */
+        .tagline { font-size:1.2rem; color:#d4b48c; max-width:600px; margin:0 auto; margin-top:0.5rem; }
         .main-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(350px,1fr)); gap:2rem; margin-bottom:3rem; }
         .card {
             background:rgba(60,40,25,0.75); backdrop-filter:blur(8px); border-radius:28px;
@@ -73,7 +69,6 @@
         .status-offline { background-color:#e74c3c; box-shadow:0 0 5px #e74c3c; }
         .mint-update { background:#2a1a0c; border-radius:20px; padding:1rem; margin-bottom:1rem; }
         footer { text-align:center; margin-top:3rem; padding-top:1.5rem; border-top:1px solid rgba(185,127,58,0.3); font-size:0.85rem; color:#bc9a6b; }
-        /* Modal */
         .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.7); backdrop-filter:blur(5px); }
         .modal-content { background:#3e2a1b; margin:10% auto; padding:2rem; border-radius:28px; width:90%; max-width:600px; border:1px solid #b97f3a; animation:modalFadeIn 0.3s cubic-bezier(0.2,0.9,0.4,1.1); }
         @keyframes modalFadeIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
@@ -93,7 +88,7 @@
 <div class="container">
     <div class="header" data-aos="fade-down" data-aos-duration="1000">
         <div class="logo">♜♜ Chess DAO ♜♜</div>
-        <h1>Chess DAO</h1>
+        <!-- <h1>Chess DAO</h1> --> <!-- Removed duplicate heading -->
         <div class="tagline">Decentralized community for chess lovers — play, learn, and govern together</div>
     </div>
 
@@ -149,7 +144,7 @@
     </footer>
 </div>
 
-<!-- Modal with Google Form Embed - Updated Form -->
+<!-- Modal with Google Form Embed -->
 <div id="discordModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
@@ -171,7 +166,6 @@
     discordRegBtn.onclick = () => discordModal.style.display = 'block';
     closeModal.onclick = () => {
         discordModal.style.display = 'none';
-        // Optional: reload iframe to reset form
         const iframe = document.querySelector('#discordModal .form-iframe');
         iframe.src = iframe.src;
     };
@@ -183,7 +177,6 @@
         }
     };
 
-    // Listen for message from Google Form (optional, to show confirmation)
     window.addEventListener('message', (e) => {
         if (e.data === 'formSubmitted') {
             discordRegStatusDiv.innerHTML = '✅ Registration received! Check your email for Discord invite.';
@@ -191,7 +184,7 @@
         }
     });
 
-    // ==================== MINT UPDATE ====================
+    // Mint Update
     const lastMint = document.getElementById('lastMint');
     const price = document.getElementById('currentPrice');
     const total = document.getElementById('totalMints');
@@ -209,7 +202,7 @@
     refreshMint.addEventListener('click', fetchMint);
     fetchMint();
 
-    // ==================== BOT CHECKER ====================
+    // Bot Checker
     const botText = document.getElementById('botStatusText');
     const botInd = document.querySelector('#botStatusDisplay .status-indicator');
     const lastCheckedSpan = document.getElementById('lastChecked');
@@ -241,7 +234,7 @@
     refreshBot.addEventListener('click', checkBot);
     checkBot();
 
-    console.log('Chess DAO: Google Form embedded for Discord registration.');
+    console.log('Chess DAO: duplicate header removed, Google Form embedded.');
 </script>
 </body>
 </html>
