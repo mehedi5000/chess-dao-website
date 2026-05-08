@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Chess DAO | Centered Team Carousel</title>
+    <title>Chess DAO | Single‑Card Centered Carousel</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing: border-box; }
@@ -51,22 +51,23 @@
         .btn-primary { background:#8b5a2b; border-color:#c28a48; }
         .btn-primary:hover { background:#a56e38; transform:scale(1.03); }
 
-        /* Team Carousel – Centered with dynamic offset */
-        .team-slideshow, .projects-slideshow { margin-top:3rem; margin-bottom:2rem; }
+        /* Single‑card centered carousel */
+        .team-carousel-section { margin-top:3rem; margin-bottom:2rem; }
         .section-title { text-align:center; font-size:2rem; margin-bottom:2rem; color:#f0dbc0; border-left:4px solid #b97f3a; padding-left:15px; display:inline-block; width:auto; margin-left:auto; margin-right:auto; }
         .carousel-wrapper {
             display: flex;
             justify-content: center;
+            align-items: center;
         }
         .carousel-container {
             overflow: hidden;
-            width: 100%;
-            max-width: 1200px;
+            width: 320px;          /* fixed width slightly larger than card to allow smooth exit/entry */
             position: relative;
+            border-radius: 28px;
         }
         .carousel-track {
             display: flex;
-            gap: 2rem;
+            gap: 0;               /* no gap, cards are placed side by side tightly */
             will-change: transform;
             transition: none;
             position: relative;
@@ -74,15 +75,20 @@
         }
         .team-card {
             background:rgba(0,0,0,0.5); border-radius:24px; padding:1.2rem; text-align:center;
-            width:220px; flex-shrink:0; transition:transform 0.3s, background 0.2s; cursor:pointer;
+            width:300px;           /* card width inside container */
+            flex-shrink:0;
+            transition:transform 0.3s, background 0.2s;
+            cursor:pointer;
             border:1px solid rgba(185,127,58,0.3);
+            margin:0 10px;        /* creates visual spacing inside container */
         }
-        .team-card:hover { transform:scale(1.03); background:rgba(185,127,58,0.3); border-color:#b97f3a; }
+        .team-card:hover { transform:scale(1.02); background:rgba(185,127,58,0.3); border-color:#b97f3a; }
         .team-card img { width:120px; height:120px; border-radius:50%; object-fit:cover; margin-bottom:0.8rem; border:2px solid #b97f3a; background:#2c1a0e; }
         .team-card .team-name { font-size:1.3rem; font-weight:bold; color:#f0dbc0; }
         .team-card .team-role { font-size:0.85rem; color:#d4b48c; margin-top:0.3rem; }
 
-        /* Project slideshow (unchanged) */
+        /* Project slideshow unchanged */
+        .projects-slideshow { margin-top:3rem; margin-bottom:2rem; }
         .slider-container { overflow:hidden; width:100%; margin:1rem 0; }
         .slider-row { display:flex; gap:1.5rem; width:max-content; will-change:transform; transform:translateZ(0); backface-visibility:hidden; }
         .slider-row img { width:200px; height:200px; flex-shrink:0; object-fit:cover; border-radius:20px; border:2px solid #b97f3a; transition:transform 0.3s, box-shadow 0.3s; cursor:pointer; }
@@ -100,10 +106,10 @@
         .close-modal:hover { color:#f5e6d3; }
 
         @keyframes fadeSlideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        .header, .main-grid, .team-slideshow, .projects-slideshow, footer { animation:fadeSlideUp 0.8s cubic-bezier(0.2,0.9,0.4,1.1) forwards; opacity:0; }
+        .header, .main-grid, .team-carousel-section, .projects-slideshow, footer { animation:fadeSlideUp 0.8s cubic-bezier(0.2,0.9,0.4,1.1) forwards; opacity:0; }
         .header { animation-delay:0.1s; }
         .main-grid { animation-delay:0.2s; }
-        .team-slideshow { animation-delay:0.3s; }
+        .team-carousel-section { animation-delay:0.3s; }
         .projects-slideshow { animation-delay:0.4s; }
         footer { animation-delay:0.5s; }
     </style>
@@ -134,8 +140,8 @@
         </div>
     </div>
 
-    <!-- Team Carousel – Centered, infinite, no duplicate profiles, initial centering -->
-    <div class="team-slideshow" data-aos="fade-up" data-aos-duration="800">
+    <!-- Single‑card, centered, infinite carousel for Founding Team -->
+    <div class="team-carousel-section" data-aos="fade-up" data-aos-duration="800">
         <div style="text-align: center;">
             <div class="section-title">👑 Founding Team</div>
         </div>
@@ -235,27 +241,28 @@
         if (e.target == discordModal) discordModal.style.display = 'none';
     };
 
-    // ========== CENTERED INFINITE CAROUSEL ==========
+    // ========== SINGLE‑CARD INFINITE CAROUSEL ==========
     const track = document.getElementById('teamTrack');
     const container = document.getElementById('teamCarousel');
     let position = 0;
-    let speed = 0.8;        // pixels per frame
+    let speed = 0.8;          // pixels per frame (adjust for smoothness)
     let animationId = null;
     let isPaused = false;
 
-    function getCardWidthWithGap() {
+    function getCardTotalWidth() {
         if (track.children.length === 0) return 0;
         const card = track.children[0];
-        const gap = parseFloat(getComputedStyle(track).gap) || 0;
-        return card.offsetWidth + gap;
+        const style = getComputedStyle(card);
+        const marginLeft = parseFloat(style.marginLeft) || 0;
+        const marginRight = parseFloat(style.marginRight) || 0;
+        return card.offsetWidth + marginLeft + marginRight;
     }
 
     function centerInitial() {
-        if (!container || !track || track.children.length === 0) return;
         const containerWidth = container.clientWidth;
-        const cardWidth = track.children[0].offsetWidth;
-        // Calculate offset to center the first card
-        const offset = (containerWidth / 2) - (cardWidth / 2);
+        const cardFullWidth = getCardTotalWidth();
+        // Center the first card inside the container
+        const offset = (containerWidth / 2) - (cardFullWidth / 2);
         position = offset;
         track.style.transform = `translateX(${position}px)`;
     }
@@ -272,33 +279,33 @@
         if (firstCard) {
             const firstRect = firstCard.getBoundingClientRect();
             const containerRect = container.getBoundingClientRect();
-            // When the entire first card is left of the container's left edge
+            // When the entire first card is completely left of the container's left edge
             if (firstRect.right < containerRect.left) {
                 track.appendChild(firstCard);
-                const movedWidth = firstCard.offsetWidth + (parseFloat(getComputedStyle(track).gap) || 0);
-                position += movedWidth;
+                const cardFullWidth = getCardTotalWidth();
+                position += cardFullWidth;
                 track.style.transform = `translateX(${position}px)`;
             }
         }
         animationId = requestAnimationFrame(animate);
     }
 
-    // Wait for layout, then center first card and start animation
+    // Wait for layout, then center and start
     setTimeout(() => {
-        if (track.children.length > 0) {
+        if (track.children.length) {
             centerInitial();
             animationId = requestAnimationFrame(animate);
         }
     }, 200);
 
-    // Re-center on window resize to maintain alignment
+    // Re‑center on window resize
     window.addEventListener('resize', () => {
         if (track.children.length) {
             centerInitial();
-            // Reset position to newly centered
         }
     });
 
+    // Pause on hover
     container.addEventListener('mouseenter', () => { isPaused = true; });
     container.addEventListener('mouseleave', () => { isPaused = false; });
 
@@ -314,7 +321,7 @@
         }
     });
 
-    console.log('Team carousel centered properly, infinite, no duplicates.');
+    console.log('Single‑card centered carousel active: cards slide one by one, no duplicates.');
 </script>
 </body>
 </html>
