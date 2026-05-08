@@ -67,7 +67,6 @@
         .status-online { background-color:#6fcf97; box-shadow:0 0 5px #6fcf97; }
         .status-offline { background-color:#e74c3c; box-shadow:0 0 5px #e74c3c; }
         footer { text-align:center; margin-top:3rem; padding-top:1.5rem; border-top:1px solid rgba(185,127,58,0.3); font-size:0.85rem; color:#bc9a6b; }
-        /* Modal styles */
         .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.7); backdrop-filter:blur(5px); }
         .modal-content { background:#3e2a1b; margin:5% auto; padding:2rem; border-radius:28px; width:90%; max-width:700px; border:1px solid #b97f3a; animation:modalFadeIn 0.3s cubic-bezier(0.2,0.9,0.4,1.1); }
         @keyframes modalFadeIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
@@ -140,7 +139,7 @@
     </footer>
 </div>
 
-<!-- Modal for Discord Registration -->
+<!-- Discord Registration Modal -->
 <div id="discordModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
@@ -149,33 +148,29 @@
     </div>
 </div>
 
-<!-- Modal for Team Profiles with clickable Twitter links (Professor.jpg updated) -->
+<!-- Team Profiles Modal (clickable profiles with image folder "image/") -->
 <div id="teamModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
         <h3>Chess DAO Team</h3>
         <div class="team-grid">
-            <!-- Cube -->
             <a href="https://x.com/cubeonchain_" target="_blank" class="team-member" style="text-decoration: none;">
-                <img class="profile-pic" src="Cube.jpg" alt="Cube">
+                <img class="profile-pic" src="image/Cube.jpg" alt="Cube">
                 <div class="team-name">Cube</div>
                 <div class="team-role">Founder</div>
             </a>
-            <!-- TopG -->
             <a href="https://x.com/TopGangstar0" target="_blank" class="team-member" style="text-decoration: none;">
-                <img class="profile-pic" src="TopG.jpg" alt="TopG">
+                <img class="profile-pic" src="image/TopG.jpg" alt="TopG">
                 <div class="team-name">TopG</div>
                 <div class="team-role">Co Founder</div>
             </a>
-            <!-- Professor - updated image name to Professor.jpg -->
             <a href="https://x.com/Mr_prof_nft" target="_blank" class="team-member" style="text-decoration: none;">
-                <img class="profile-pic" src="Professor.jpg" alt="Professor">
+                <img class="profile-pic" src="image/Professor.jpg" alt="Professor">
                 <div class="team-name">Professor</div>
                 <div class="team-role">Co Founder</div>
             </a>
-            <!-- Slix -->
             <a href="https://x.com/SlixWeb3" target="_blank" class="team-member" style="text-decoration: none;">
-                <img class="profile-pic" src="Slix.jpg" alt="Slix">
+                <img class="profile-pic" src="image/Slix.jpg" alt="Slix">
                 <div class="team-name">Slix</div>
                 <div class="team-role">Co Founder</div>
             </a>
@@ -202,7 +197,6 @@
     teamBtn.onclick = () => teamModal.style.display = 'block';
     closeTeam.onclick = () => teamModal.style.display = 'none';
 
-    // Click outside close modals
     window.onclick = (e) => {
         if (e.target == discordModal) discordModal.style.display = 'none';
         if (e.target == teamModal) teamModal.style.display = 'none';
@@ -240,7 +234,7 @@
     refreshBot.addEventListener('click', checkBot);
     checkBot();
 
-    console.log('Chess DAO: Professor image updated to Professor.jpg');
+    console.log('Chess DAO: Images loaded from "image/" folder.');
 </script>
 </body>
 </html>
