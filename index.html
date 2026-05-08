@@ -74,21 +74,8 @@
         .close-modal { float:right; font-size:2rem; font-weight:bold; cursor:pointer; color:#d4b48c; }
         .close-modal:hover { color:#f5e6d3; }
         .team-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem; margin-top:2rem; }
-        .team-member { 
-            text-align:center; 
-            background:rgba(0,0,0,0.3); 
-            border-radius:20px; 
-            padding:1rem; 
-            transition:transform 0.2s, background 0.2s;
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
-            color: inherit;
-        }
-        .team-member:hover { 
-            transform:scale(1.02); 
-            background:rgba(185,127,58,0.2);
-        }
+        .team-member { text-align:center; background:rgba(0,0,0,0.3); border-radius:20px; padding:1rem; transition:transform 0.2s; cursor:pointer; }
+        .team-member:hover { transform:scale(1.02); background:rgba(185,127,58,0.2); }
         .profile-pic { width:120px; height:120px; border-radius:50%; object-fit:cover; margin-bottom:1rem; border:2px solid #b97f3a; background:#2c1a0e; }
         .team-name { font-size:1.3rem; font-weight:bold; color:#f0dbc0; }
         .team-role { font-size:0.9rem; color:#d4b48c; margin-top:0.3rem; }
@@ -153,47 +140,47 @@
     </footer>
 </div>
 
-<!-- Modal for Discord Registration (Google Form) -->
+<!-- Modal for Discord Registration -->
 <div id="discordModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
         <h3>Discord Registration</h3>
-        <iframe class="form-iframe" style="width:100%; height:500px; border:none; border-radius:20px; margin-top:1rem;" src="https://docs.google.com/forms/d/e/1FAIpQLSc6zmP1DqTjcgKHIaw4U1rvu-08Ac7Jj7M7LfVMSMs8VAf-Gw/viewform?embedded=true"></iframe>
+        <iframe style="width:100%; height:500px; border:none; border-radius:20px; margin-top:1rem;" src="https://docs.google.com/forms/d/e/1FAIpQLSc6zmP1DqTjcgKHIaw4U1rvu-08Ac7Jj7M7LfVMSMs8VAf-Gw/viewform?embedded=true"></iframe>
     </div>
 </div>
 
-<!-- Modal for Team Profiles -->
+<!-- Modal for Team Profiles with clickable Twitter links -->
 <div id="teamModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
         <h3>Chess DAO Team</h3>
         <div class="team-grid">
             <!-- Cube -->
-            <a href="https://x.com/cubeonchain_" target="_blank" class="team-member">
-                <img class="profile-pic" src="images/Cube.jpg" alt="Cube">
+            <a href="https://x.com/cubeonchain_" target="_blank" class="team-member" style="text-decoration: none;">
+                <img class="profile-pic" src="Cube.jpg" alt="Cube">
                 <div class="team-name">Cube</div>
                 <div class="team-role">Founder</div>
             </a>
             <!-- TopG -->
-            <a href="https://x.com/TopGangstar0" target="_blank" class="team-member">
-                <img class="profile-pic" src="images/TopG.jpg" alt="TopG">
+            <a href="https://x.com/TopGangstar0" target="_blank" class="team-member" style="text-decoration: none;">
+                <img class="profile-pic" src="TopG.jpg" alt="TopG">
                 <div class="team-name">TopG</div>
                 <div class="team-role">Co Founder</div>
             </a>
             <!-- Professor -->
-            <a href="https://x.com/Mr_prof_nft" target="_blank" class="team-member">
-                <img class="profile-pic" src="images/Proffessor.jpg" alt="Professor">
+            <a href="https://x.com/Mr_prof_nft" target="_blank" class="team-member" style="text-decoration: none;">
+                <img class="profile-pic" src="Proffessor.jpg" alt="Professor">
                 <div class="team-name">Professor</div>
                 <div class="team-role">Co Founder</div>
             </a>
             <!-- Slix -->
-            <a href="https://x.com/SlixWeb3" target="_blank" class="team-member">
-                <img class="profile-pic" src="images/Slix.jpg" alt="Slix">
+            <a href="https://x.com/SlixWeb3" target="_blank" class="team-member" style="text-decoration: none;">
+                <img class="profile-pic" src="Slix.jpg" alt="Slix">
                 <div class="team-name">Slix</div>
                 <div class="team-role">Co Founder</div>
             </a>
         </div>
-        <p style="text-align:center; margin-top:1.5rem; font-size:0.8rem; opacity:0.8;">👑 Click on any profile to visit their X (Twitter) page</p>
+        <p style="text-align:center; margin-top:1.5rem; font-size:0.8rem; opacity:0.8;">👑 Click any profile to visit their X (Twitter)</p>
     </div>
 </div>
 
@@ -201,25 +188,27 @@
 <script>
     AOS.init({ once: false, mirror: true, duration: 800, easing: 'ease-out-cubic', offset: 80 });
 
-    // Discord Modal Logic
+    // Discord Modal
     const discordModal = document.getElementById('discordModal');
     const discordRegBtn = document.getElementById('discordRegBtn');
     const closeDiscord = document.querySelector('#discordModal .close-modal');
     discordRegBtn.onclick = () => discordModal.style.display = 'block';
     closeDiscord.onclick = () => discordModal.style.display = 'none';
-    window.onclick = (e) => {
-        if (e.target == discordModal) discordModal.style.display = 'none';
-        if (e.target == teamModal) teamModal.style.display = 'none';
-    };
 
-    // Team Modal Logic
+    // Team Modal
     const teamModal = document.getElementById('teamModal');
     const teamBtn = document.getElementById('teamModalBtn');
     const closeTeam = document.querySelector('#teamModal .close-modal');
     teamBtn.onclick = () => teamModal.style.display = 'block';
     closeTeam.onclick = () => teamModal.style.display = 'none';
 
-    // Bot Checker (unchanged)
+    // Click outside close modals
+    window.onclick = (e) => {
+        if (e.target == discordModal) discordModal.style.display = 'none';
+        if (e.target == teamModal) teamModal.style.display = 'none';
+    };
+
+    // Bot Checker
     const botText = document.getElementById('botStatusText');
     const botInd = document.querySelector('#botStatusDisplay .status-indicator');
     const lastCheckedSpan = document.getElementById('lastChecked');
@@ -251,7 +240,7 @@
     refreshBot.addEventListener('click', checkBot);
     checkBot();
 
-    console.log('Chess DAO: Team profiles clickable to X profiles. Google Form for Discord registration.');
+    console.log('Chess DAO: Team profiles with Twitter links & correct image names (Cube.jpg, TopG.jpg, Proffessor.jpg, Slix.jpg).');
 </script>
 </body>
 </html>
