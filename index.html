@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Chess DAO | Animated Brown Theme</title>
-    <!-- AOS Library for scroll animations -->
+    <title>Chess DAO | Super Smooth Edition</title>
+    <!-- AOS Library for scroll animations (smooth) -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         * {
@@ -21,10 +21,10 @@
             min-height: 100vh;
         }
 
-        /* Animated chess pattern background */
+        /* Animated background with parallax effect */
         @keyframes slowMove {
             0% {
-                background-position: 0 0;
+                background-position: 0% 0%;
             }
             100% {
                 background-position: 100% 100%;
@@ -43,7 +43,8 @@
             background-size: 40px;
             pointer-events: none;
             z-index: 0;
-            animation: slowMove 40s linear infinite alternate;
+            animation: slowMove 60s linear infinite alternate;
+            will-change: background-position;
         }
 
         .container {
@@ -54,9 +55,17 @@
             z-index: 2;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
+        /* Floating logo animation */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
         }
 
         .logo {
@@ -67,6 +76,8 @@
             padding: 0.5rem 1rem;
             border-radius: 60px;
             backdrop-filter: blur(4px);
+            animation: float 5s ease-in-out infinite;
+            will-change: transform;
         }
 
         h1 {
@@ -93,6 +104,7 @@
             margin-bottom: 3rem;
         }
 
+        /* Smooth card with advanced transition */
         .card {
             background: rgba(60, 40, 25, 0.75);
             backdrop-filter: blur(8px);
@@ -100,13 +112,16 @@
             padding: 1.8rem;
             border: 1px solid rgba(185, 127, 58, 0.4);
             box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
-            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), box-shadow 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), 
+                        box-shadow 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1),
+                        border-color 0.2s ease;
+            will-change: transform, box-shadow;
         }
 
         .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 40px -12px rgba(0,0,0,0.6);
-            border-color: rgba(210, 150, 75, 0.7);
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 30px 45px -15px rgba(0,0,0,0.7);
+            border-color: rgba(210, 150, 75, 0.8);
         }
 
         .card h2 {
@@ -125,6 +140,12 @@
             overflow: hidden;
             margin-top: 1rem;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .discord-widget:hover {
+            transform: scale(1.01);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.4);
         }
 
         iframe {
@@ -151,9 +172,10 @@
             border-radius: 40px;
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             border: 1px solid rgba(185, 127, 58, 0.5);
             cursor: pointer;
+            will-change: transform, background;
         }
 
         .btn-primary {
@@ -163,7 +185,7 @@
 
         .btn-primary:hover {
             background: #a56e38;
-            transform: scale(1.02);
+            transform: scale(1.03);
         }
 
         .btn-gold {
@@ -175,6 +197,7 @@
         .btn-gold:hover {
             background: #b97f3a;
             color: #2c1a0e;
+            transform: scale(1.03);
         }
 
         .form-group {
@@ -197,10 +220,15 @@
             background: rgba(0, 0, 0, 0.3);
             color: #f5e6d3;
             font-size: 1rem;
+            transition: border 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .form-group select option {
-            background: #3e2a1b;
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #d4a373;
+            box-shadow: 0 0 0 2px rgba(212, 163, 115, 0.3);
         }
 
         .bot-status {
@@ -208,6 +236,11 @@
             border-radius: 20px;
             padding: 1rem;
             text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .bot-status:hover {
+            transform: scale(1.01);
         }
 
         .status-indicator {
@@ -216,6 +249,7 @@
             height: 12px;
             border-radius: 50%;
             margin-right: 8px;
+            transition: all 0.2s ease;
         }
 
         .status-online {
@@ -244,7 +278,7 @@
             color: #bc9a6b;
         }
 
-        /* Modal styles */
+        /* Modal smooth */
         .modal {
             display: none;
             position: fixed;
@@ -255,6 +289,7 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
         }
 
         .modal-content {
@@ -266,6 +301,18 @@
             max-width: 500px;
             border: 1px solid #b97f3a;
             box-shadow: 0 20px 35px -12px black;
+            animation: modalFadeIn 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .modal-content h3 {
@@ -282,17 +329,48 @@
             font-weight: bold;
             cursor: pointer;
             color: #d4b48c;
+            transition: color 0.2s;
         }
 
         .close-modal:hover {
             color: #f5e6d3;
+        }
+
+        /* Staggered fade-in on page load using CSS */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header, .main-grid, footer {
+            animation: fadeSlideUp 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+            opacity: 0; /* start invisible */
+        }
+
+        .header {
+            animation-delay: 0.1s;
+        }
+        .main-grid:first-of-type {
+            animation-delay: 0.2s;
+        }
+        .main-grid:last-of-type {
+            animation-delay: 0.3s;
+        }
+        footer {
+            animation-delay: 0.4s;
         }
     </style>
 </head>
 <body>
 <div class="bg-pattern"></div>
 <div class="container">
-    <div class="header" data-aos="fade-down" data-aos-duration="1000">
+    <div class="header">
         <div class="logo">♜♞ Chess DAO ♝♛</div>
         <h1>Chess DAO</h1>
         <div class="tagline">Decentralized community for chess lovers — play, learn, and govern together</div>
@@ -300,8 +378,7 @@
 
     <!-- Grid 1 -->
     <div class="main-grid">
-        <!-- Collection Card -->
-        <div class="card" data-aos="fade-up" data-aos-duration="800">
+        <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-offset="50">
             <h2><span>📦</span> Collection</h2>
             <p>Register your project for the Chess DAO collection. Choose your role: OG, GTD, or FCFS.</p>
             <div class="btn-group">
@@ -310,8 +387,7 @@
             <div id="collectionStatus" style="font-size:0.8rem; margin-top:1rem;"></div>
         </div>
 
-        <!-- Member Form Card -->
-        <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+        <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100" data-aos-offset="50">
             <h2><span>📝</span> Member Form</h2>
             <p>Fill this form to get access to Chess DAO private channels and updates.</p>
             <form id="memberForm">
@@ -332,8 +408,7 @@
             </form>
         </div>
 
-        <!-- Discord Access Card -->
-        <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+        <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200" data-aos-offset="50">
             <h2><span>🎮</span> Discord Access</h2>
             <p>Join the Chess DAO Discord server and chat live with members.</p>
             <div class="btn-group">
@@ -354,8 +429,7 @@
 
     <!-- Grid 2 -->
     <div class="main-grid">
-        <!-- Mint Update Card -->
-        <div class="card" data-aos="fade-up" data-aos-duration="800">
+        <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-offset="50">
             <h2><span>✨</span> Mint Update</h2>
             <p>Latest information about Chess DAO NFT mints and collection stats.</p>
             <div id="mintInfo" class="mint-update">
@@ -367,8 +441,7 @@
             <button id="refreshMintData" class="btn btn-gold">🔄 Refresh Data</button>
         </div>
 
-        <!-- Bot Checker Card -->
-        <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+        <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100" data-aos-offset="50">
             <h2><span>🤖</span> Bot Checker</h2>
             <p>Real-time status of the Chess DAO Discord bot.</p>
             <div class="bot-status">
@@ -382,7 +455,7 @@
         </div>
     </div>
 
-    <footer data-aos="fade-up" data-aos-duration="600">
+    <footer>
         <p>♞ Chess DAO — An open decentralized chess community | Free & open source website</p>
         <p style="margin-top: 10px;">🔧 <strong>Configuration:</strong> Replace YOUR_SERVER_ID, YOUR_INVITE_CODE, YOUR_DISCORD_CLIENT_ID, YOUR_WEB3FORMS_KEY, and YOUR_BOT_API_URL inside the script.</p>
     </footer>
@@ -417,15 +490,17 @@
     </div>
 </div>
 
-<!-- Scripts -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-    // Initialize AOS
+    // Initialize AOS with smoother settings
     AOS.init({
-        once: false,
+        once: true,
         mirror: false,
         duration: 800,
-        offset: 50
+        easing: 'ease-out-quad',
+        offset: 80,
+        delay: 0,
+        disable: false
     });
 
     // ==================== COLLECTION MODAL ====================
@@ -469,10 +544,10 @@
         }, 2000);
     });
 
-    // ==================== MEMBER FORM (Web3Forms demo) ====================
+    // ==================== MEMBER FORM ====================
     const form = document.getElementById('memberForm');
     const formStatus = document.getElementById('formStatus');
-    const WEB3FORMS_KEY = 'YOUR_WEB3FORMS_KEY'; // replace with your key
+    const WEB3FORMS_KEY = 'YOUR_WEB3FORMS_KEY';
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -506,7 +581,7 @@
     // ==================== DISCORD LOGIN ====================
     const discordLoginBtn = document.getElementById('discordLoginBtn');
     const discordUserInfoDiv = document.getElementById('discordUserInfo');
-    const DISCORD_CLIENT_ID = 'YOUR_DISCORD_CLIENT_ID'; // replace
+    const DISCORD_CLIENT_ID = 'YOUR_DISCORD_CLIENT_ID';
     const REDIRECT_URI = encodeURIComponent(window.location.href);
     const DISCORD_OAUTH_URL = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=identify`;
 
@@ -592,7 +667,7 @@
     refreshBotStatusBtn.addEventListener('click', checkBotStatus);
     checkBotStatus();
 
-    console.log('Chess DAO Animated Site Loaded');
+    console.log('Chess DAO Super Smooth Site Loaded');
 </script>
 </body>
 </html>
