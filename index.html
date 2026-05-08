@@ -67,14 +67,28 @@
         .status-online { background-color:#6fcf97; box-shadow:0 0 5px #6fcf97; }
         .status-offline { background-color:#e74c3c; box-shadow:0 0 5px #e74c3c; }
         footer { text-align:center; margin-top:3rem; padding-top:1.5rem; border-top:1px solid rgba(185,127,58,0.3); font-size:0.85rem; color:#bc9a6b; }
+        /* Modal styles */
         .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.7); backdrop-filter:blur(5px); }
         .modal-content { background:#3e2a1b; margin:5% auto; padding:2rem; border-radius:28px; width:90%; max-width:700px; border:1px solid #b97f3a; animation:modalFadeIn 0.3s cubic-bezier(0.2,0.9,0.4,1.1); }
         @keyframes modalFadeIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
         .close-modal { float:right; font-size:2rem; font-weight:bold; cursor:pointer; color:#d4b48c; }
         .close-modal:hover { color:#f5e6d3; }
         .team-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem; margin-top:2rem; }
-        .team-member { text-align:center; background:rgba(0,0,0,0.3); border-radius:20px; padding:1rem; transition:transform 0.2s; }
-        .team-member:hover { transform:scale(1.02); }
+        .team-member { 
+            text-align:center; 
+            background:rgba(0,0,0,0.3); 
+            border-radius:20px; 
+            padding:1rem; 
+            transition:transform 0.2s, background 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+        .team-member:hover { 
+            transform:scale(1.02); 
+            background:rgba(185,127,58,0.2);
+        }
         .profile-pic { width:120px; height:120px; border-radius:50%; object-fit:cover; margin-bottom:1rem; border:2px solid #b97f3a; background:#2c1a0e; }
         .team-name { font-size:1.3rem; font-weight:bold; color:#f0dbc0; }
         .team-role { font-size:0.9rem; color:#d4b48c; margin-top:0.3rem; }
@@ -117,7 +131,7 @@
     <div class="main-grid">
         <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
             <h2><span>👥</span> Team Profiles</h2>
-            <p>Meet the founders and core team behind Chess DAO.</p>
+            <p>Meet the founders and core team behind Chess DAO. Click on any profile to visit their X (Twitter).</p>
             <div class="btn-group">
                 <button id="teamModalBtn" class="btn btn-primary">👥 View Team</button>
             </div>
@@ -144,7 +158,7 @@
     <div class="modal-content">
         <span class="close-modal">&times;</span>
         <h3>Discord Registration</h3>
-        <iframe style="width:100%; height:500px; border:none; border-radius:20px; margin-top:1rem;" src="https://docs.google.com/forms/d/e/1FAIpQLSc6zmP1DqTjcgKHIaw4U1rvu-08Ac7Jj7M7LfVMSMs8VAf-Gw/viewform?embedded=true"></iframe>
+        <iframe class="form-iframe" style="width:100%; height:500px; border:none; border-radius:20px; margin-top:1rem;" src="https://docs.google.com/forms/d/e/1FAIpQLSc6zmP1DqTjcgKHIaw4U1rvu-08Ac7Jj7M7LfVMSMs8VAf-Gw/viewform?embedded=true"></iframe>
     </div>
 </div>
 
@@ -154,28 +168,32 @@
         <span class="close-modal">&times;</span>
         <h3>Chess DAO Team</h3>
         <div class="team-grid">
-            <div class="team-member">
-                <img class="profile-pic" src="Cube.jpg" alt="Cube">
+            <!-- Cube -->
+            <a href="https://x.com/cubeonchain_" target="_blank" class="team-member">
+                <img class="profile-pic" src="images/Cube.jpg" alt="Cube">
                 <div class="team-name">Cube</div>
                 <div class="team-role">Founder</div>
-            </div>
-            <div class="team-member">
-                <img class="profile-pic" src="TopG.jpg" alt="TopG">
+            </a>
+            <!-- TopG -->
+            <a href="https://x.com/TopGangstar0" target="_blank" class="team-member">
+                <img class="profile-pic" src="images/TopG.jpg" alt="TopG">
                 <div class="team-name">TopG</div>
                 <div class="team-role">Co Founder</div>
-            </div>
-            <div class="team-member">
-                <img class="profile-pic" src="Proffessor.jpg" alt="Professor">
+            </a>
+            <!-- Professor -->
+            <a href="https://x.com/Mr_prof_nft" target="_blank" class="team-member">
+                <img class="profile-pic" src="images/Proffessor.jpg" alt="Professor">
                 <div class="team-name">Professor</div>
                 <div class="team-role">Co Founder</div>
-            </div>
-            <div class="team-member">
-                <img class="profile-pic" src="Slix.jpg" alt="Slix">
+            </a>
+            <!-- Slix -->
+            <a href="https://x.com/SlixWeb3" target="_blank" class="team-member">
+                <img class="profile-pic" src="images/Slix.jpg" alt="Slix">
                 <div class="team-name">Slix</div>
                 <div class="team-role">Co Founder</div>
-            </div>
+            </a>
         </div>
-        <p style="text-align:center; margin-top:1.5rem; font-size:0.8rem; opacity:0.8;">👑 Founding team of Chess DAO</p>
+        <p style="text-align:center; margin-top:1.5rem; font-size:0.8rem; opacity:0.8;">👑 Click on any profile to visit their X (Twitter) page</p>
     </div>
 </div>
 
@@ -201,7 +219,7 @@
     teamBtn.onclick = () => teamModal.style.display = 'block';
     closeTeam.onclick = () => teamModal.style.display = 'none';
 
-    // Bot Checker
+    // Bot Checker (unchanged)
     const botText = document.getElementById('botStatusText');
     const botInd = document.querySelector('#botStatusDisplay .status-indicator');
     const lastCheckedSpan = document.getElementById('lastChecked');
@@ -233,7 +251,7 @@
     refreshBot.addEventListener('click', checkBot);
     checkBot();
 
-    console.log('Chess DAO: Team profile images added from GitHub root.');
+    console.log('Chess DAO: Team profiles clickable to X profiles. Google Form for Discord registration.');
 </script>
 </body>
 </html>
