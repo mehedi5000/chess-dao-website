@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Chess DAO | Decentralized Chess Community</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0f1e 0%, #0f172a 100%);
+            color: #e2e8f0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* subtle chess pattern background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>');
+            background-repeat: repeat;
+            background-size: 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: rgba(255,255,255,0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #f5f3e8, #cbb26a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin: 2rem 0 1.5rem 0;
+            border-left: 4px solid #cbb26a;
+            padding-left: 1rem;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: rgba(20, 30, 45, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 1.8rem;
+            border: 1px solid rgba(255,215,0,0.2);
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(203, 178, 106, 0.5);
+        }
+
+        .card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 4px solid #cbb26a;
+            padding-left: 15px;
+        }
+
+        .discord-widget {
+            background: #1e2a3a;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 1rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        iframe {
+            width: 100%;
+            height: 450px;
+            border: none;
+            display: block;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #2d3a4e;
+            color: white;
+            padding: 0.75rem 1.6rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: 1px solid rgba(203,178,106,0.3);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #5865F2;
+            border-color: #7983f5;
+        }
+
+        .btn-primary:hover {
+            background: #4752c4;
+            transform: scale(1.02);
+        }
+
+        .btn-gold {
+            background: rgba(203, 178, 106, 0.2);
+            border: 1px solid #cbb26a;
+            color: #cbb26a;
+        }
+
+        .btn-gold:hover {
+            background: #cbb26a;
+            color: #0f172a;
+        }
+
+        .wallet-status {
+            background: #0f172a;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: #cbb26a;
+            border: 1px solid rgba(203,178,106,0.3);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 16px;
+            border: 1px solid rgba(203,178,106,0.3);
+            background: rgba(0,0,0,0.3);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .bot-status {
+            background: #0f172a;
+            border-radius: 20px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online {
+            background-color: #23d160;
+            box-shadow: 0 0 5px #23d160;
+        }
+
+        .status-offline {
+            background-color: #ff3860;
+            box-shadow: 0 0 5px #ff3860;
+        }
+
+        .mint-update {
+            background: #0f172a;
+            border-radius: 20px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            background: rgba(0,0,0,0.3);
+            padding: 1rem;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .feature-emoji {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(203,178,106,0.2);
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        @media (max-width: 750px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .logo {
+                font-size: 2.8rem;
+            }
+            .container {
+                padding: 1.5rem;
+            }
+        }
+
+        .info-note {
+            background: #0f172ab3;
+            border-radius: 16px;
+            padding: 0.8rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            border-left: 3px solid #cbb26a;
+        }
+        code {
+            background: #00000055;
+            padding: 0.2rem 0.4rem;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+<div class="bg-pattern"></div>
+<div class="container">
+    <div class="header">
+        <div class="logo">♜♞ Chess DAO ♝♛</div>
+        <h1>Chess DAO</h1>
+        <div class="tagline">Decentralized community for chess lovers — play, learn, and govern together</div>
+    </div>
+
+    <!-- Feature Grid 1 -->
+    <div class="main-grid">
+        <!-- 1. Wallet Connection -->
+        <div class="card">
+            <h2><span>🔗</span> Wallet Connection</h2>
+            <p>Connect your crypto wallet to unlock Web3 features, voting, and NFT rewards.</p>
+            <div class="btn-group">
+                <button id="connectWalletBtn" class="btn btn-primary">🔐 Connect Wallet</button>
+                <div id="walletInfo" class="wallet-status" style="display:none;">
+                    <span id="walletAddress"></span>
+                </div>
+            </div>
+            <div id="walletStatus" style="font-size:0.8rem; margin-top:0.5rem;"></div>
+        </div>
+
+        <!-- 2. Member Form -->
+        <div class="card">
+            <h2><span>📝</span> Member Form</h2>
+            <p>Fill this form to get access to Chess DAO private channels and updates.</p>
+            <form id="memberForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="message">Chess rating / experience</label>
+                    <textarea id="message" name="message" required placeholder="Tell us about your chess level"></textarea>
+                </div>
+                <button type="submit" class="btn btn-gold">📨 Submit Form</button>
+                <div id="formStatus" style="margin-top:1rem; font-size:0.8rem;"></div>
+            </form>
+        </div>
+
+        <!-- 3. Discord Access + Widget -->
+        <div class="card">
+            <h2><span>🎮</span> Discord Access</h2>
+            <p>Join the Chess DAO Discord server and chat live with members.</p>
+            <div class="btn-group">
+                <button id="discordLoginBtn" class="btn btn-primary">🎮 Discord Login</button>
+                <a href="https://discord.gg/YOUR_INVITE_CODE" class="btn btn-gold" target="_blank">🎧 Join Server</a>
+            </div>
+            <div id="discordUserInfo" style="margin-top:1rem; font-size:0.8rem;"></div>
+            <div class="discord-widget">
+                <iframe src="https://discord.com/widget?id=YOUR_SERVER_ID&theme=dark" 
+                        title="Discord Widget"
+                        allowtransparency="true"
+                        frameborder="0"
+                        sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Grid 2 -->
+    <div class="main-grid">
+        <!-- 4. Mint Update -->
+        <div class="card">
+            <h2><span>✨</span> Mint Update</h2>
+            <p>Latest information about Chess DAO NFT mints and collection stats.</p>
+            <div id="mintInfo" class="mint-update">
+                <p><strong>🏆 Last mint:</strong> <span id="lastMint">-</span></p>
+                <p><strong>💰 Current price:</strong> <span id="currentPrice">-</span></p>
+                <p><strong>👥 Total mints:</strong> <span id="totalMints">-</span></p>
+                <p><em>🧪 Demo mode: simulated data</em></p>
+            </div>
+            <button id="refreshMintData" class="btn btn-gold">🔄 Refresh Data</button>
+        </div>
+
+        <!-- 5. Bot Checker -->
+        <div class="card">
+            <h2><span>🤖</span> Bot Checker</h2>
+            <p>Real-time status of the Chess DAO Discord bot. You can connect your own bot API.</p>
+            <div class="bot-status">
+                <div id="botStatusDisplay">
+                    <span class="status-indicator status-offline"></span>
+                    <span id="botStatusText">Checking...</span>
+                </div>
+                <p style="margin-top:1rem; font-size:0.7rem;">⏱️ Last checked: <span id="lastChecked">-</span></p>
+                <button id="refreshBotStatus" class="btn btn-gold" style="margin-top:1rem;">🔄 Check Now</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>♞ Chess DAO — An open decentralized chess community | Free & open source website</p>
+        <p style="margin-top: 10px;">🔧 <strong>Configuration:</strong> Replace <code>YOUR_SERVER_ID</code>, <code>YOUR_INVITE_CODE</code>, <code>YOUR_DISCORD_CLIENT_ID</code> and <code>YOUR_BOT_API_URL</code> inside the script below.</p>
+    </footer>
+</div>
+
+<script>
+    // ==================== 1. WALLET CONNECTION (MetaMask) ====================
+    let currentAccount = null;
+    const connectWalletBtn = document.getElementById('connectWalletBtn');
+    const walletInfo = document.getElementById('walletInfo');
+    const walletAddressSpan = document.getElementById('walletAddress');
+    const walletStatusDiv = document.getElementById('walletStatus');
+
+    async function connectWallet() {
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                currentAccount = accounts[0];
+                walletAddressSpan.textContent = `🔗 ${currentAccount.slice(0, 6)}...${currentAccount.slice(-4)}`;
+                walletInfo.style.display = 'block';
+                walletStatusDiv.textContent = '✅ Wallet connected successfully!';
+                connectWalletBtn.textContent = '✅ Connected';
+                connectWalletBtn.disabled = true;
+            } catch (error) {
+                walletStatusDiv.textContent = '❌ Connection failed.';
+                console.error(error);
+            }
+        } else {
+            walletStatusDiv.textContent = '⚠️ Please install MetaMask extension.';
+        }
+    }
+
+    connectWalletBtn.addEventListener('click', connectWallet);
+
+    if (typeof window.ethereum !== 'undefined') {
+        window.ethereum.on('accountsChanged', (accounts) => {
+            if (accounts.length === 0) {
+                currentAccount = null;
+                walletInfo.style.display = 'none';
+                walletStatusDiv.textContent = '🔴 Wallet disconnected.';
+                connectWalletBtn.textContent = '🔐 Connect Wallet';
+                connectWalletBtn.disabled = false;
+            } else {
+                currentAccount = accounts[0];
+                walletAddressSpan.textContent = `🔗 ${currentAccount.slice(0, 6)}...${currentAccount.slice(-4)}`;
+                walletInfo.style.display = 'block';
+                walletStatusDiv.textContent = '✅ Wallet changed.';
+            }
+        });
+    }
+
+    // ==================== 2. FORM SUBMISSION (Web3Forms demo) ====================
+    const form = document.getElementById('memberForm');
+    const formStatus = document.getElementById('formStatus');
+    const WEB3FORMS_KEY = 'YOUR_WEB3FORMS_KEY';  // replace with your key from web3forms.com
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        formStatus.textContent = '⏳ Sending...';
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        if (WEB3FORMS_KEY && WEB3FORMS_KEY !== 'YOUR_WEB3FORMS_KEY') {
+            try {
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        access_key: WEB3FORMS_KEY,
+                        name: name,
+                        email: email,
+                        message: message
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    formStatus.textContent = '✅ Form submitted successfully!';
+                    form.reset();
+                } else {
+                    formStatus.textContent = '❌ Submission failed.';
+                }
+            } catch (err) {
+                formStatus.textContent = '⚠️ Server error. Try again.';
+            }
+        } else {
+            formStatus.textContent = 'ℹ️ Demo mode: form accepted (add your Web3Forms key).';
+            form.reset();
+        }
+    });
+
+    // ==================== 3. DISCORD OAUTH LOGIN ====================
+    const discordLoginBtn = document.getElementById('discordLoginBtn');
+    const discordUserInfoDiv = document.getElementById('discordUserInfo');
+    const DISCORD_CLIENT_ID = 'YOUR_DISCORD_CLIENT_ID';  // replace with your app's client ID
+    const REDIRECT_URI = encodeURIComponent(window.location.href);
+    const DISCORD_OAUTH_URL = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=identify`;
+
+    discordLoginBtn.addEventListener('click', () => {
+        if (DISCORD_CLIENT_ID === 'YOUR_DISCORD_CLIENT_ID') {
+            discordUserInfoDiv.innerHTML = '<span style="color:orange;">⚠️ Set your Discord Client ID in the code.</span>';
+            return;
+        }
+        window.open(DISCORD_OAUTH_URL, 'Discord Login', 'width=500,height=700');
+    });
+
+    function handleDiscordRedirect() {
+        const hash = window.location.hash.substring(1);
+        const params = new URLSearchParams(hash);
+        const accessToken = params.get('access_token');
+        if (accessToken) {
+            fetch('https://discord.com/api/users/@me', {
+                headers: { Authorization: `Bearer ${accessToken}` }
+            })
+            .then(res => res.json())
+            .then(user => {
+                discordUserInfoDiv.innerHTML = `✅ Logged in as: <strong>${user.username}#${user.discriminator}</strong>`;
+            })
+            .catch(err => console.error(err));
+        }
+    }
+    handleDiscordRedirect();
+
+    // ==================== 4. MINT UPDATE (demo + refresh) ====================
+    const lastMintSpan = document.getElementById('lastMint');
+    const currentPriceSpan = document.getElementById('currentPrice');
+    const totalMintsSpan = document.getElementById('totalMints');
+    const refreshMintDataBtn = document.getElementById('refreshMintData');
+
+    async function fetchMintData() {
+        lastMintSpan.textContent = 'Loading...';
+        currentPriceSpan.textContent = 'Loading...';
+        totalMintsSpan.textContent = 'Loading...';
+        // Simulate API call – replace with real NFT API (e.g. Alchemy)
+        setTimeout(() => {
+            lastMintSpan.textContent = new Date().toLocaleString();
+            currentPriceSpan.textContent = '0.05 ETH';
+            totalMintsSpan.textContent = Math.floor(Math.random() * 1000) + 1;
+        }, 800);
+    }
+
+    refreshMintDataBtn.addEventListener('click', fetchMintData);
+    fetchMintData();
+
+    // ==================== 5. BOT CHECKER (custom API endpoint) ====================
+    const botStatusText = document.getElementById('botStatusText');
+    const botStatusIndicator = document.querySelector('#botStatusDisplay .status-indicator');
+    const lastCheckedSpan = document.getElementById('lastChecked');
+    const refreshBotStatusBtn = document.getElementById('refreshBotStatus');
+    const BOT_API_URL = 'YOUR_BOT_API_HEALTH_ENDPOINT';  // replace with your bot's health endpoint
+
+    async function checkBotStatus() {
+        lastCheckedSpan.textContent = new Date().toLocaleTimeString();
+        botStatusText.textContent = 'Checking...';
+        if (BOT_API_URL && BOT_API_URL !== 'YOUR_BOT_API_HEALTH_ENDPOINT') {
+            try {
+                const response = await fetch(BOT_API_URL);
+                if (response.ok) {
+                    botStatusText.textContent = 'Bot Online 🟢';
+                    botStatusIndicator.className = 'status-indicator status-online';
+                } else {
+                    botStatusText.textContent = 'Bot Offline 🔴';
+                    botStatusIndicator.className = 'status-indicator status-offline';
+                }
+            } catch (error) {
+                botStatusText.textContent = 'Bot Offline 🔴';
+                botStatusIndicator.className = 'status-indicator status-offline';
+            }
+        } else {
+            // Demo mode: random status
+            const randomOnline = Math.random() > 0.3;
+            if (randomOnline) {
+                botStatusText.textContent = 'Bot Online 🟢 (demo)';
+                botStatusIndicator.className = 'status-indicator status-online';
+            } else {
+                botStatusText.textContent = 'Bot Offline 🔴 (demo)';
+                botStatusIndicator.className = 'status-indicator status-offline';
+            }
+        }
+    }
+
+    refreshBotStatusBtn.addEventListener('click', checkBotStatus);
+    checkBotStatus();
+
+    console.log("Chess DAO Enhanced Website Loaded - All features ready.");
+</script>
+</body>
+</html>
