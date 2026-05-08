@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Chess DAO | Final</title>
+    <title>Chess DAO | Team Profiles</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing: border-box; }
@@ -41,8 +41,7 @@
             animation:float 5s ease-in-out infinite;
             will-change:transform;
         }
-        /* Removed h1 styling as it's no longer needed */
-        .tagline { font-size:1.2rem; color:#d4b48c; max-width:600px; margin:0 auto; margin-top:0.5rem; }
+        .tagline { font-size:1.2rem; color:#d4b48c; max-width:600px; margin:0.5rem auto 0; }
         .main-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(350px,1fr)); gap:2rem; margin-bottom:3rem; }
         .card {
             background:rgba(60,40,25,0.75); backdrop-filter:blur(8px); border-radius:28px;
@@ -67,14 +66,19 @@
         .status-indicator { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:8px; }
         .status-online { background-color:#6fcf97; box-shadow:0 0 5px #6fcf97; }
         .status-offline { background-color:#e74c3c; box-shadow:0 0 5px #e74c3c; }
-        .mint-update { background:#2a1a0c; border-radius:20px; padding:1rem; margin-bottom:1rem; }
         footer { text-align:center; margin-top:3rem; padding-top:1.5rem; border-top:1px solid rgba(185,127,58,0.3); font-size:0.85rem; color:#bc9a6b; }
+        /* Modal styles */
         .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.7); backdrop-filter:blur(5px); }
-        .modal-content { background:#3e2a1b; margin:10% auto; padding:2rem; border-radius:28px; width:90%; max-width:600px; border:1px solid #b97f3a; animation:modalFadeIn 0.3s cubic-bezier(0.2,0.9,0.4,1.1); }
+        .modal-content { background:#3e2a1b; margin:5% auto; padding:2rem; border-radius:28px; width:90%; max-width:700px; border:1px solid #b97f3a; animation:modalFadeIn 0.3s cubic-bezier(0.2,0.9,0.4,1.1); }
         @keyframes modalFadeIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
         .close-modal { float:right; font-size:2rem; font-weight:bold; cursor:pointer; color:#d4b48c; }
         .close-modal:hover { color:#f5e6d3; }
-        .form-iframe { width:100%; height:500px; border:none; border-radius:20px; margin-top:1rem; }
+        .team-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem; margin-top:2rem; }
+        .team-member { text-align:center; background:rgba(0,0,0,0.3); border-radius:20px; padding:1rem; transition:transform 0.2s; }
+        .team-member:hover { transform:scale(1.02); }
+        .profile-pic { width:120px; height:120px; border-radius:50%; object-fit:cover; margin-bottom:1rem; border:2px solid #b97f3a; background:#2c1a0e; }
+        .team-name { font-size:1.3rem; font-weight:bold; color:#f0dbc0; }
+        .team-role { font-size:0.9rem; color:#d4b48c; margin-top:0.3rem; }
         @keyframes fadeSlideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
         .header, .main-grid, footer { animation:fadeSlideUp 0.8s cubic-bezier(0.2,0.9,0.4,1.1) forwards; opacity:0; }
         .header { animation-delay:0.1s; }
@@ -88,13 +92,11 @@
 <div class="container">
     <div class="header" data-aos="fade-down" data-aos-duration="1000">
         <div class="logo">♜♜ Chess DAO ♜♜</div>
-        <!-- <h1>Chess DAO</h1> --> <!-- Removed duplicate heading -->
         <div class="tagline">Decentralized community for chess lovers — play, learn, and govern together</div>
     </div>
 
-    <!-- First grid -->
+    <!-- First grid: Twitter & Discord Registration -->
     <div class="main-grid">
-        <!-- Twitter Card -->
         <div class="card" data-aos="fade-up" data-aos-duration="800">
             <h2><span>🐦</span> Twitter / X</h2>
             <p>Follow Chess DAO on X (Twitter) for the latest updates, announcements, and community news.</p>
@@ -102,8 +104,6 @@
                 <a href="https://twitter.com/ChessDaoo" target="_blank" class="btn btn-primary">𝕏 Follow on X</a>
             </div>
         </div>
-
-        <!-- Discord Registration Card (opens Google Form modal) -->
         <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
             <h2><span>💬</span> Discord Registration</h2>
             <p>Join our Discord server by registering below. Click the button to open the registration form.</p>
@@ -114,18 +114,15 @@
         </div>
     </div>
 
-    <!-- Second grid -->
+    <!-- Second grid: Team Profiles & Bot Checker -->
     <div class="main-grid">
+        <!-- Team Profiles Card (replaces Mint Update) -->
         <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
-            <h2><span>✨</span> Mint Update</h2>
-            <p>Latest information about Chess DAO NFT mints and collection stats.</p>
-            <div class="mint-update">
-                <p><strong>🏆 Last mint:</strong> <span id="lastMint">-</span></p>
-                <p><strong>💰 Current price:</strong> <span id="currentPrice">-</span></p>
-                <p><strong>👥 Total mints:</strong> <span id="totalMints">-</span></p>
-                <p><em>🧪 Demo mode: simulated data</em></p>
+            <h2><span>👥</span> Team Profiles</h2>
+            <p>Meet the founders and core team behind Chess DAO.</p>
+            <div class="btn-group">
+                <button id="teamModalBtn" class="btn btn-primary">👥 View Team</button>
             </div>
-            <button id="refreshMintData" class="btn btn-gold">🔄 Refresh Data</button>
         </div>
         <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
             <h2><span>🤖</span> Bot Checker</h2>
@@ -144,12 +141,47 @@
     </footer>
 </div>
 
-<!-- Modal with Google Form Embed -->
+<!-- Modal for Discord Registration (Google Form) -->
 <div id="discordModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
         <h3>Discord Registration</h3>
-        <iframe class="form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSc6zmP1DqTjcgKHIaw4U1rvu-08Ac7Jj7M7LfVMSMs8VAf-Gw/viewform?embedded=true"></iframe>
+        <iframe class="form-iframe" style="width:100%; height:500px; border:none; border-radius:20px; margin-top:1rem;" src="https://docs.google.com/forms/d/e/1FAIpQLSc6zmP1DqTjcgKHIaw4U1rvu-08Ac7Jj7M7LfVMSMs8VAf-Gw/viewform?embedded=true"></iframe>
+    </div>
+</div>
+
+<!-- Modal for Team Profiles -->
+<div id="teamModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Chess DAO Team</h3>
+        <div class="team-grid">
+            <!-- Member 1 -->
+            <div class="team-member">
+                <img class="profile-pic" src="https://via.placeholder.com/120?text=Cube" alt="Cube" id="profileImg1">
+                <div class="team-name">Cube</div>
+                <div class="team-role">Founder</div>
+            </div>
+            <!-- Member 2 -->
+            <div class="team-member">
+                <img class="profile-pic" src="https://via.placeholder.com/120?text=TopG" alt="TopG" id="profileImg2">
+                <div class="team-name">TopG</div>
+                <div class="team-role">Co Founder</div>
+            </div>
+            <!-- Member 3 -->
+            <div class="team-member">
+                <img class="profile-pic" src="https://via.placeholder.com/120?text=Professor" alt="Professor" id="profileImg3">
+                <div class="team-name">Professor</div>
+                <div class="team-role">Co Founder</div>
+            </div>
+            <!-- Member 4 -->
+            <div class="team-member">
+                <img class="profile-pic" src="https://via.placeholder.com/120?text=Slix" alt="Slix" id="profileImg4">
+                <div class="team-name">Slix</div>
+                <div class="team-role">Co Founder</div>
+            </div>
+        </div>
+        <p style="text-align:center; margin-top:1.5rem; font-size:0.8rem; opacity:0.8;">👑 Founding team of Chess DAO</p>
     </div>
 </div>
 
@@ -157,52 +189,29 @@
 <script>
     AOS.init({ once: false, mirror: true, duration: 800, easing: 'ease-out-cubic', offset: 80 });
 
-    // Discord Modal with Google Form
+    // Discord Modal Logic
     const discordModal = document.getElementById('discordModal');
     const discordRegBtn = document.getElementById('discordRegBtn');
-    const closeModal = document.querySelector('#discordModal .close-modal');
-    const discordRegStatusDiv = document.getElementById('discordRegStatus');
-
+    const closeDiscord = document.querySelector('#discordModal .close-modal');
     discordRegBtn.onclick = () => discordModal.style.display = 'block';
-    closeModal.onclick = () => {
-        discordModal.style.display = 'none';
-        const iframe = document.querySelector('#discordModal .form-iframe');
-        iframe.src = iframe.src;
-    };
+    closeDiscord.onclick = () => discordModal.style.display = 'none';
     window.onclick = (e) => {
-        if (e.target == discordModal) {
-            discordModal.style.display = 'none';
-            const iframe = document.querySelector('#discordModal .form-iframe');
-            iframe.src = iframe.src;
-        }
+        if (e.target == discordModal) discordModal.style.display = 'none';
+        if (e.target == teamModal) teamModal.style.display = 'none';
     };
 
-    window.addEventListener('message', (e) => {
-        if (e.data === 'formSubmitted') {
-            discordRegStatusDiv.innerHTML = '✅ Registration received! Check your email for Discord invite.';
-            setTimeout(() => discordModal.style.display = 'none', 2000);
-        }
-    });
+    // Team Modal Logic
+    const teamModal = document.getElementById('teamModal');
+    const teamBtn = document.getElementById('teamModalBtn');
+    const closeTeam = document.querySelector('#teamModal .close-modal');
+    teamBtn.onclick = () => teamModal.style.display = 'block';
+    closeTeam.onclick = () => teamModal.style.display = 'none';
 
-    // Mint Update
-    const lastMint = document.getElementById('lastMint');
-    const price = document.getElementById('currentPrice');
-    const total = document.getElementById('totalMints');
-    const refreshMint = document.getElementById('refreshMintData');
-    function fetchMint() {
-        lastMint.innerText = 'Loading...';
-        price.innerText = 'Loading...';
-        total.innerText = 'Loading...';
-        setTimeout(() => {
-            lastMint.innerText = new Date().toLocaleString();
-            price.innerText = '0.05 ETH';
-            total.innerText = Math.floor(Math.random() * 1000) + 1;
-        }, 800);
-    }
-    refreshMint.addEventListener('click', fetchMint);
-    fetchMint();
+    // (OPTIONAL) Later you can replace placeholder image src with actual image URLs.
+    // Example: document.getElementById('profileImg1').src = "your-cube-image.jpg";
+    // For now, placeholders are visible.
 
-    // Bot Checker
+    // Bot Checker (unchanged)
     const botText = document.getElementById('botStatusText');
     const botInd = document.querySelector('#botStatusDisplay .status-indicator');
     const lastCheckedSpan = document.getElementById('lastChecked');
@@ -234,7 +243,7 @@
     refreshBot.addEventListener('click', checkBot);
     checkBot();
 
-    console.log('Chess DAO: duplicate header removed, Google Form embedded.');
+    console.log('Chess DAO: Mint Update replaced by Team Profiles modal. Ready for profile images.');
 </script>
 </body>
 </html>
