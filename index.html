@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Chess DAO | Centered Team Carousel</title>
+    <title>Chess DAO | Perfectly Centered Team Carousel</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing: border-box; }
@@ -51,12 +51,18 @@
         .btn-primary { background:#8b5a2b; border-color:#c28a48; }
         .btn-primary:hover { background:#a56e38; transform:scale(1.03); }
 
-        /* Team Carousel */
+        /* Team Carousel – centered using flex, infinite loop with JS */
         .team-slideshow, .projects-slideshow { margin-top:3rem; margin-bottom:2rem; }
         .section-title { text-align:center; font-size:2rem; margin-bottom:2rem; color:#f0dbc0; border-left:4px solid #b97f3a; padding-left:15px; display:inline-block; width:auto; margin-left:auto; margin-right:auto; }
+        .carousel-outer {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
         .carousel-container {
             overflow: hidden;
-            width: 100%;
+            width: auto;
+            max-width: 100%;
             position: relative;
         }
         .carousel-track {
@@ -129,32 +135,34 @@
         </div>
     </div>
 
-    <!-- Team Carousel – perfectly centered group, infinite scroll -->
+    <!-- Team Carousel – perfectly centered using CSS flex + JS infinite scroll -->
     <div class="team-slideshow" data-aos="fade-up" data-aos-duration="800">
         <div style="text-align: center;">
             <div class="section-title">👑 Founding Team</div>
         </div>
-        <div class="carousel-container" id="teamCarousel">
-            <div class="carousel-track" id="teamTrack">
-                <div class="team-card" data-link="https://x.com/cubeonchain_">
-                    <img src="image/Cube.jpg" alt="Cube">
-                    <div class="team-name">Cube</div>
-                    <div class="team-role">Founder</div>
-                </div>
-                <div class="team-card" data-link="https://x.com/TopGangstar0">
-                    <img src="image/TopG.jpg" alt="TopG">
-                    <div class="team-name">TopG</div>
-                    <div class="team-role">Co Founder</div>
-                </div>
-                <div class="team-card" data-link="https://x.com/Mr_prof_nft">
-                    <img src="image/Professor.jpg" alt="Professor">
-                    <div class="team-name">Professor</div>
-                    <div class="team-role">Co Founder</div>
-                </div>
-                <div class="team-card" data-link="https://x.com/SlixWeb3">
-                    <img src="image/Slix.jpg" alt="Slix">
-                    <div class="team-name">Slix</div>
-                    <div class="team-role">Co Founder</div>
+        <div class="carousel-outer">
+            <div class="carousel-container" id="teamCarousel">
+                <div class="carousel-track" id="teamTrack">
+                    <div class="team-card" data-link="https://x.com/cubeonchain_">
+                        <img src="image/Cube.jpg" alt="Cube">
+                        <div class="team-name">Cube</div>
+                        <div class="team-role">Founder</div>
+                    </div>
+                    <div class="team-card" data-link="https://x.com/TopGangstar0">
+                        <img src="image/TopG.jpg" alt="TopG">
+                        <div class="team-name">TopG</div>
+                        <div class="team-role">Co Founder</div>
+                    </div>
+                    <div class="team-card" data-link="https://x.com/Mr_prof_nft">
+                        <img src="image/Professor.jpg" alt="Professor">
+                        <div class="team-name">Professor</div>
+                        <div class="team-role">Co Founder</div>
+                    </div>
+                    <div class="team-card" data-link="https://x.com/SlixWeb3">
+                        <img src="image/Slix.jpg" alt="Slix">
+                        <div class="team-name">Slix</div>
+                        <div class="team-role">Co Founder</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -228,31 +236,29 @@
         if (e.target == discordModal) discordModal.style.display = 'none';
     };
 
-    // ========== CENTERED INFINITE CAROUSEL (no duplicates) ==========
+    // ========== PERFECTLY CENTERED INFINITE CAROUSEL ==========
     const track = document.getElementById('teamTrack');
     const container = document.getElementById('teamCarousel');
     let position = 0;
-    let speed = 0.8;          // pixels per frame (adjust speed as needed)
+    let speed = 0.8;
     let animationId = null;
     let isPaused = false;
-    let totalCardsWidth = 0;
 
-    function updateTotalWidth() {
-        if (!track || track.children.length === 0) return;
-        const cards = track.children;
+    function getTrackWidth() {
         let total = 0;
-        const gap = parseFloat(getComputedStyle(track).gap) || 0;
-        for (let i = 0; i < cards.length; i++) {
-            total += cards[i].offsetWidth;
-            if (i < cards.length - 1) total += gap;
+        for (let i = 0; i < track.children.length; i++) {
+            total += track.children[i].offsetWidth;
         }
-        totalCardsWidth = total;
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+        total += gap * (track.children.length - 1);
+        return total;
     }
 
-    function centerGroup() {
+    function centerTrack() {
         const containerWidth = container.clientWidth;
-        if (totalCardsWidth < containerWidth) {
-            position = (containerWidth - totalCardsWidth) / 2;
+        const trackWidth = getTrackWidth();
+        if (trackWidth < containerWidth) {
+            position = (containerWidth - trackWidth) / 2;
         } else {
             position = 0;
         }
@@ -271,12 +277,10 @@
         if (firstCard) {
             const firstRect = firstCard.getBoundingClientRect();
             const containerRect = container.getBoundingClientRect();
-            // When the first card is completely out of the container on the left side
+            // If first card completely exits left side
             if (firstRect.right < containerRect.left) {
                 track.appendChild(firstCard);
-                const cardWidth = firstCard.offsetWidth;
-                const gap = parseFloat(getComputedStyle(track).gap) || 0;
-                const movedWidth = cardWidth + gap;
+                const movedWidth = firstCard.offsetWidth + (parseFloat(getComputedStyle(track).gap) || 0);
                 position += movedWidth;
                 track.style.transform = `translateX(${position}px)`;
             }
@@ -286,35 +290,26 @@
 
     setTimeout(() => {
         if (track.children.length) {
-            updateTotalWidth();
-            centerGroup();
+            centerTrack();
             animationId = requestAnimationFrame(animate);
         }
-    }, 200);
+    }, 100);
 
     window.addEventListener('resize', () => {
-        if (track.children.length) {
-            updateTotalWidth();
-            centerGroup();
-        }
+        centerTrack();
     });
 
     container.addEventListener('mouseenter', () => { isPaused = true; });
     container.addEventListener('mouseleave', () => { isPaused = false; });
 
-    // Clickable team cards
+    // Clickable cards
     const cards = document.querySelectorAll('.team-card');
     cards.forEach(card => {
         const link = card.getAttribute('data-link');
         if (link) {
-            card.style.cursor = 'pointer';
-            card.addEventListener('click', () => {
-                window.open(link, '_blank');
-            });
+            card.addEventListener('click', () => window.open(link, '_blank'));
         }
     });
-
-    console.log('Team carousel: perfectly centered, infinite scroll, no duplicates');
 </script>
 </body>
 </html>
