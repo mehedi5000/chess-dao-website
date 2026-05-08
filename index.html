@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Chess DAO | Team Slideshow</title>
+    <title>Chess DAO | Team Slideshow (No Duplicates)</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing: border-box; }
@@ -51,15 +51,20 @@
         .btn-primary { background:#8b5a2b; border-color:#c28a48; }
         .btn-primary:hover { background:#a56e38; transform:scale(1.03); }
 
-        /* Team Slideshow (same style as project slideshow) */
+        /* Team Slideshow (JavaScript-powered, no duplicates) */
         .team-slideshow, .projects-slideshow { margin-top:3rem; margin-bottom:2rem; }
         .section-title { text-align:center; font-size:2rem; margin-bottom:2rem; color:#f0dbc0; border-left:4px solid #b97f3a; padding-left:15px; display:inline-block; width:auto; margin-left:auto; margin-right:auto; }
-        .slider-container { overflow:hidden; width:100%; margin:1rem 0; }
-        .slider-row { display:flex; gap:2rem; width:max-content; will-change:transform; transform:translateZ(0); backface-visibility:hidden; align-items:center; }
-        /* Team member card inside slider */
+        .slider-container { overflow:hidden; width:100%; position:relative; }
+        .slider-row {
+            display: flex;
+            gap: 2rem;
+            will-change: transform;
+            transition: transform 0.3s linear;
+            position: relative;
+        }
         .team-card {
             background:rgba(0,0,0,0.5); border-radius:24px; padding:1.2rem; text-align:center;
-            width:220px; transition:transform 0.3s, background 0.2s; cursor:pointer;
+            width:220px; flex-shrink:0; transition:transform 0.3s, background 0.2s; cursor:pointer;
             border:1px solid rgba(185,127,58,0.3);
         }
         .team-card:hover { transform:scale(1.03); background:rgba(185,127,58,0.3); border-color:#b97f3a; }
@@ -67,13 +72,20 @@
         .team-card .team-name { font-size:1.3rem; font-weight:bold; color:#f0dbc0; }
         .team-card .team-role { font-size:0.85rem; color:#d4b48c; margin-top:0.3rem; }
 
-        /* Project slideshow images */
-        .slider-row img { width:200px; height:200px; flex-shrink:0; object-fit:cover; border-radius:20px; border:2px solid #b97f3a; transition:transform 0.3s, box-shadow 0.3s; cursor:pointer; }
-        .slider-row img:hover { transform:scale(1.05); box-shadow:0 10px 20px rgba(0,0,0,0.4); }
-
+        /* Project slideshow images (CSS infinite scroll with duplicates – fine for images) */
+        .slider-row-img {
+            display: flex;
+            gap: 1.5rem;
+            width: max-content;
+            will-change: transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+        .slider-row-img img { width:200px; height:200px; flex-shrink:0; object-fit:cover; border-radius:20px; border:2px solid #b97f3a; transition:transform 0.3s, box-shadow 0.3s; cursor:pointer; }
+        .slider-row-img img:hover { transform:scale(1.05); box-shadow:0 10px 20px rgba(0,0,0,0.4); }
         @keyframes scrollLeft { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
         @keyframes scrollRight { 0% { transform:translateX(-50%); } 100% { transform:translateX(0); } }
-        .scroll-left { animation:scrollLeft 40s linear infinite; }
+        .scroll-left { animation:scrollLeft 60s linear infinite; }
         .scroll-right { animation:scrollRight 60s linear infinite; }
 
         footer { text-align:center; margin-top:3rem; padding-top:1.5rem; border-top:1px solid rgba(185,127,58,0.3); font-size:0.85rem; color:#bc9a6b; }
@@ -118,38 +130,14 @@
         </div>
     </div>
 
-    <!-- Team Slideshow (instead of View Team button) -->
+    <!-- Team Slideshow (JavaScript infinite loop – no duplicate profiles) -->
     <div class="team-slideshow" data-aos="fade-up" data-aos-duration="800">
         <div style="text-align: center;">
             <div class="section-title">👑 Founding Team</div>
         </div>
-        <div class="slider-container">
-            <div class="slider-row scroll-left">
-                <!-- Team Member 1 -->
-                <a href="https://x.com/cubeonchain_" target="_blank" class="team-card" style="text-decoration: none;">
-                    <img src="image/Cube.jpg" alt="Cube">
-                    <div class="team-name">Cube</div>
-                    <div class="team-role">Founder</div>
-                </a>
-                <!-- Team Member 2 -->
-                <a href="https://x.com/TopGangstar0" target="_blank" class="team-card" style="text-decoration: none;">
-                    <img src="image/TopG.jpg" alt="TopG">
-                    <div class="team-name">TopG</div>
-                    <div class="team-role">Co Founder</div>
-                </a>
-                <!-- Team Member 3 -->
-                <a href="https://x.com/Mr_prof_nft" target="_blank" class="team-card" style="text-decoration: none;">
-                    <img src="image/Professor.jpg" alt="Professor">
-                    <div class="team-name">Professor</div>
-                    <div class="team-role">Co Founder</div>
-                </a>
-                <!-- Team Member 4 -->
-                <a href="https://x.com/SlixWeb3" target="_blank" class="team-card" style="text-decoration: none;">
-                    <img src="image/Slix.jpg" alt="Slix">
-                    <div class="team-name">Slix</div>
-                    <div class="team-role">Co Founder</div>
-                </a>
-                <!-- Duplicate for infinite scroll -->
+        <div class="slider-container" id="teamSliderContainer">
+            <div class="slider-row" id="teamSliderRow">
+                <!-- 4 unique team members (no duplicates) -->
                 <a href="https://x.com/cubeonchain_" target="_blank" class="team-card" style="text-decoration: none;">
                     <img src="image/Cube.jpg" alt="Cube">
                     <div class="team-name">Cube</div>
@@ -174,13 +162,13 @@
         </div>
     </div>
 
-    <!-- Collaboration Projects Slideshow -->
+    <!-- Collaboration Projects Slideshow (CSS infinite, duplicates acceptable) -->
     <div class="projects-slideshow" data-aos="fade-up" data-aos-duration="800">
         <div style="text-align: center;">
             <div class="section-title">🤝 Collab Recap</div>
         </div>
         <div class="slider-container">
-            <div class="slider-row scroll-left">
+            <div class="slider-row-img scroll-left">
                 <img src="projects/P1.jpg" alt="Project 1" loading="lazy">
                 <img src="projects/P2.jpg" alt="Project 2" loading="lazy">
                 <img src="projects/P3.jpg" alt="Project 3" loading="lazy">
@@ -196,7 +184,7 @@
             </div>
         </div>
         <div class="slider-container">
-            <div class="slider-row scroll-right">
+            <div class="slider-row-img scroll-right">
                 <img src="projects/P7.jpg" alt="Project 7" loading="lazy">
                 <img src="projects/P8.jpg" alt="Project 8" loading="lazy">
                 <img src="projects/P9.jpg" alt="Project 9" loading="lazy">
@@ -219,7 +207,7 @@
     </footer>
 </div>
 
-<!-- Discord Modal (only modal left) -->
+<!-- Discord Modal -->
 <div id="discordModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
@@ -231,6 +219,8 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
     AOS.init({ once: false, mirror: true, duration: 800, easing: 'ease-out-cubic', offset: 80 });
+
+    // Discord Modal
     const discordModal = document.getElementById('discordModal');
     const discordRegBtn = document.getElementById('discordRegBtn');
     const closeDiscord = document.querySelector('#discordModal .close-modal');
@@ -239,7 +229,64 @@
     window.onclick = (e) => {
         if (e.target == discordModal) discordModal.style.display = 'none';
     };
-    console.log('Team slideshow added, View Team button removed');
+
+    // ========== INFINITE SCROLL FOR TEAM SLIDER (no duplicates) ==========
+    const sliderRow = document.getElementById('teamSliderRow');
+    let scrollInterval = null;
+    let currentTranslate = 0;
+    const speed = 0.5; // pixels per frame (adjust speed)
+    let animationId = null;
+
+    // Get total width of one set of items (including gaps)
+    function getTotalWidth() {
+        const items = sliderRow.children;
+        if (items.length === 0) return 0;
+        let total = 0;
+        for (let i = 0; i < items.length; i++) {
+            total += items[i].offsetWidth;
+        }
+        const gap = parseFloat(getComputedStyle(sliderRow).gap) || 0;
+        total += gap * (items.length - 1);
+        return total;
+    }
+
+    function animate() {
+        currentTranslate -= speed;
+        const totalWidth = getTotalWidth();
+        // When we've scrolled past the width of the first item, move it to the end
+        if (Math.abs(currentTranslate) >= sliderRow.children[0].offsetWidth + parseFloat(getComputedStyle(sliderRow).gap)) {
+            // Move first child to end
+            const first = sliderRow.children[0];
+            sliderRow.appendChild(first);
+            // Adjust currentTranslate by the width of moved item + gap
+            const movedWidth = first.offsetWidth + parseFloat(getComputedStyle(sliderRow).gap);
+            currentTranslate += movedWidth;
+        }
+        sliderRow.style.transform = `translateX(${currentTranslate}px)`;
+        animationId = requestAnimationFrame(animate);
+    }
+
+    // Start animation after a short delay to allow layout
+    setTimeout(() => {
+        if (sliderRow.children.length > 0) {
+            // Set initial position
+            currentTranslate = 0;
+            sliderRow.style.transform = `translateX(0px)`;
+            animationId = requestAnimationFrame(animate);
+        }
+    }, 200);
+
+    // Optional: pause animation on hover
+    const teamContainer = document.getElementById('teamSliderContainer');
+    teamContainer.addEventListener('mouseenter', () => {
+        if (animationId) cancelAnimationFrame(animationId);
+        animationId = null;
+    });
+    teamContainer.addEventListener('mouseleave', () => {
+        if (!animationId) animationId = requestAnimationFrame(animate);
+    });
+
+    console.log('Team slider with seamless infinite loop (no duplicates) active.');
 </script>
 </body>
 </html>
