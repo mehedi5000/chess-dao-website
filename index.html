@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Chess DAO | Team Profiles</title>
+    <title>Chess DAO | Team Slideshow</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing: border-box; }
@@ -31,8 +31,6 @@
         }
         .tagline { font-size:1.2rem; color:#d4b48c; max-width:600px; margin:0.5rem auto 0; }
         .main-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(350px,1fr)); gap:2rem; margin-bottom:3rem; }
-        .single-card-grid { display:flex; justify-content:center; margin-bottom:3rem; }
-        .single-card-grid .card { max-width:500px; width:100%; }
         .card {
             background:rgba(60,40,25,0.85); backdrop-filter:blur(8px); border-radius:28px;
             padding:1.8rem; border:1px solid rgba(185,127,58,0.4);
@@ -52,19 +50,30 @@
         }
         .btn-primary { background:#8b5a2b; border-color:#c28a48; }
         .btn-primary:hover { background:#a56e38; transform:scale(1.03); }
-        .btn-gold { background:rgba(139,90,43,0.4); border-color:#b97f3a; color:#f0dbc0; }
-        .btn-gold:hover { background:#b97f3a; color:#2c1a0e; transform:scale(1.03); }
 
-        /* Slideshow (unchanged, same as before) */
-        .projects-slideshow { margin-top:3rem; margin-bottom:2rem; }
-        .projects-title { text-align:center; font-size:2rem; margin-bottom:2rem; color:#f0dbc0; border-left:4px solid #b97f3a; padding-left:15px; display:inline-block; width:auto; margin-left:auto; margin-right:auto; }
+        /* Team Slideshow (same style as project slideshow) */
+        .team-slideshow, .projects-slideshow { margin-top:3rem; margin-bottom:2rem; }
+        .section-title { text-align:center; font-size:2rem; margin-bottom:2rem; color:#f0dbc0; border-left:4px solid #b97f3a; padding-left:15px; display:inline-block; width:auto; margin-left:auto; margin-right:auto; }
         .slider-container { overflow:hidden; width:100%; margin:1rem 0; }
-        .slider-row { display:flex; gap:1.5rem; width:max-content; will-change:transform; transform:translateZ(0); backface-visibility:hidden; }
+        .slider-row { display:flex; gap:2rem; width:max-content; will-change:transform; transform:translateZ(0); backface-visibility:hidden; align-items:center; }
+        /* Team member card inside slider */
+        .team-card {
+            background:rgba(0,0,0,0.5); border-radius:24px; padding:1.2rem; text-align:center;
+            width:220px; transition:transform 0.3s, background 0.2s; cursor:pointer;
+            border:1px solid rgba(185,127,58,0.3);
+        }
+        .team-card:hover { transform:scale(1.03); background:rgba(185,127,58,0.3); border-color:#b97f3a; }
+        .team-card img { width:120px; height:120px; border-radius:50%; object-fit:cover; margin-bottom:0.8rem; border:2px solid #b97f3a; background:#2c1a0e; }
+        .team-card .team-name { font-size:1.3rem; font-weight:bold; color:#f0dbc0; }
+        .team-card .team-role { font-size:0.85rem; color:#d4b48c; margin-top:0.3rem; }
+
+        /* Project slideshow images */
         .slider-row img { width:200px; height:200px; flex-shrink:0; object-fit:cover; border-radius:20px; border:2px solid #b97f3a; transition:transform 0.3s, box-shadow 0.3s; cursor:pointer; }
         .slider-row img:hover { transform:scale(1.05); box-shadow:0 10px 20px rgba(0,0,0,0.4); }
+
         @keyframes scrollLeft { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
         @keyframes scrollRight { 0% { transform:translateX(-50%); } 100% { transform:translateX(0); } }
-        .scroll-left { animation:scrollLeft 60s linear infinite; }
+        .scroll-left { animation:scrollLeft 40s linear infinite; }
         .scroll-right { animation:scrollRight 60s linear infinite; }
 
         footer { text-align:center; margin-top:3rem; padding-top:1.5rem; border-top:1px solid rgba(185,127,58,0.3); font-size:0.85rem; color:#bc9a6b; }
@@ -73,17 +82,12 @@
         @keyframes modalFadeIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
         .close-modal { float:right; font-size:2rem; font-weight:bold; cursor:pointer; color:#d4b48c; }
         .close-modal:hover { color:#f5e6d3; }
-        .team-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem; margin-top:2rem; }
-        .team-member { text-align:center; background:rgba(0,0,0,0.5); border-radius:20px; padding:1rem; transition:transform 0.2s; cursor:pointer; }
-        .team-member:hover { transform:scale(1.02); background:rgba(185,127,58,0.3); }
-        .profile-pic { width:120px; height:120px; border-radius:50%; object-fit:cover; margin-bottom:1rem; border:2px solid #b97f3a; background:#2c1a0e; }
-        .team-name { font-size:1.3rem; font-weight:bold; color: #f0dbc0; }   /* পূর্বের রং ফিরিয়ে দেওয়া হয়েছে */
-        .team-role { font-size:0.9rem; color:#d4b48c; margin-top:0.3rem; }
+
         @keyframes fadeSlideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        .header, .main-grid, .single-card-grid, .projects-slideshow, footer { animation:fadeSlideUp 0.8s cubic-bezier(0.2,0.9,0.4,1.1) forwards; opacity:0; }
+        .header, .main-grid, .team-slideshow, .projects-slideshow, footer { animation:fadeSlideUp 0.8s cubic-bezier(0.2,0.9,0.4,1.1) forwards; opacity:0; }
         .header { animation-delay:0.1s; }
-        .main-grid:first-of-type { animation-delay:0.2s; }
-        .single-card-grid { animation-delay:0.3s; }
+        .main-grid { animation-delay:0.2s; }
+        .team-slideshow { animation-delay:0.3s; }
         .projects-slideshow { animation-delay:0.4s; }
         footer { animation-delay:0.5s; }
     </style>
@@ -95,16 +99,17 @@
         <div class="tagline">Decentralized community for chess lovers — play, learn, and govern together</div>
     </div>
 
+    <!-- Twitter & Discord Cards -->
     <div class="main-grid">
         <div class="card" data-aos="fade-up" data-aos-duration="800">
-            <h2><span>🐦</span> Twitter / X</h2>
+            <h2>🐦 Twitter / X</h2>
             <p>Follow Chess DAO on X (Twitter) for the latest updates, announcements, and community news.</p>
             <div class="btn-group">
                 <a href="https://twitter.com/ChessDaoo" target="_blank" class="btn btn-primary">𝕏 Follow on X</a>
             </div>
         </div>
         <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
-            <h2><span>💬</span> Discord Registration</h2>
+            <h2>💬 Discord Registration</h2>
             <p>Join our Discord server by registering below. Click the button to open the registration form.</p>
             <div class="btn-group">
                 <button id="discordRegBtn" class="btn btn-primary">🎮 Register with Discord</button>
@@ -113,19 +118,66 @@
         </div>
     </div>
 
-    <div class="single-card-grid">
-        <div class="card" data-aos="fade-up" data-aos-duration="800">
-            <h2><span>👥</span> Team Profiles</h2>
-            <p>Meet the founders and core team behind Chess DAO. Click on any profile to visit their X (Twitter).</p>
-            <div class="btn-group">
-                <button id="teamModalBtn" class="btn btn-primary">👥 View Team</button>
+    <!-- Team Slideshow (instead of View Team button) -->
+    <div class="team-slideshow" data-aos="fade-up" data-aos-duration="800">
+        <div style="text-align: center;">
+            <div class="section-title">👑 Founding Team</div>
+        </div>
+        <div class="slider-container">
+            <div class="slider-row scroll-left">
+                <!-- Team Member 1 -->
+                <a href="https://x.com/cubeonchain_" target="_blank" class="team-card" style="text-decoration: none;">
+                    <img src="image/Cube.jpg" alt="Cube">
+                    <div class="team-name">Cube</div>
+                    <div class="team-role">Founder</div>
+                </a>
+                <!-- Team Member 2 -->
+                <a href="https://x.com/TopGangstar0" target="_blank" class="team-card" style="text-decoration: none;">
+                    <img src="image/TopG.jpg" alt="TopG">
+                    <div class="team-name">TopG</div>
+                    <div class="team-role">Co Founder</div>
+                </a>
+                <!-- Team Member 3 -->
+                <a href="https://x.com/Mr_prof_nft" target="_blank" class="team-card" style="text-decoration: none;">
+                    <img src="image/Professor.jpg" alt="Professor">
+                    <div class="team-name">Professor</div>
+                    <div class="team-role">Co Founder</div>
+                </a>
+                <!-- Team Member 4 -->
+                <a href="https://x.com/SlixWeb3" target="_blank" class="team-card" style="text-decoration: none;">
+                    <img src="image/Slix.jpg" alt="Slix">
+                    <div class="team-name">Slix</div>
+                    <div class="team-role">Co Founder</div>
+                </a>
+                <!-- Duplicate for infinite scroll -->
+                <a href="https://x.com/cubeonchain_" target="_blank" class="team-card" style="text-decoration: none;">
+                    <img src="image/Cube.jpg" alt="Cube">
+                    <div class="team-name">Cube</div>
+                    <div class="team-role">Founder</div>
+                </a>
+                <a href="https://x.com/TopGangstar0" target="_blank" class="team-card" style="text-decoration: none;">
+                    <img src="image/TopG.jpg" alt="TopG">
+                    <div class="team-name">TopG</div>
+                    <div class="team-role">Co Founder</div>
+                </a>
+                <a href="https://x.com/Mr_prof_nft" target="_blank" class="team-card" style="text-decoration: none;">
+                    <img src="image/Professor.jpg" alt="Professor">
+                    <div class="team-name">Professor</div>
+                    <div class="team-role">Co Founder</div>
+                </a>
+                <a href="https://x.com/SlixWeb3" target="_blank" class="team-card" style="text-decoration: none;">
+                    <img src="image/Slix.jpg" alt="Slix">
+                    <div class="team-name">Slix</div>
+                    <div class="team-role">Co Founder</div>
+                </a>
             </div>
         </div>
     </div>
 
-    <div class="projects-slideshow">
+    <!-- Collaboration Projects Slideshow -->
+    <div class="projects-slideshow" data-aos="fade-up" data-aos-duration="800">
         <div style="text-align: center;">
-            <div class="projects-title">🤝 Collab Recap</div>
+            <div class="section-title">🤝 Collab Recap</div>
         </div>
         <div class="slider-container">
             <div class="slider-row scroll-left">
@@ -167,41 +219,12 @@
     </footer>
 </div>
 
+<!-- Discord Modal (only modal left) -->
 <div id="discordModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
         <h3>Discord Registration</h3>
         <iframe style="width:100%; height:500px; border:none; border-radius:20px; margin-top:1rem;" src="https://docs.google.com/forms/d/e/1FAIpQLSc6zmP1DqTjcgKHIaw4U1rvu-08Ac7Jj7M7LfVMSMs8VAf-Gw/viewform?embedded=true"></iframe>
-    </div>
-</div>
-
-<div id="teamModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h3>Chess DAO Team</h3>
-        <div class="team-grid">
-            <a href="https://x.com/cubeonchain_" target="_blank" class="team-member" style="text-decoration: none;">
-                <img class="profile-pic" src="image/Cube.jpg" alt="Cube">
-                <div class="team-name">Cube</div>
-                <div class="team-role">Founder</div>
-            </a>
-            <a href="https://x.com/TopGangstar0" target="_blank" class="team-member" style="text-decoration: none;">
-                <img class="profile-pic" src="image/TopG.jpg" alt="TopG">
-                <div class="team-name">TopG</div>
-                <div class="team-role">Co Founder</div>
-            </a>
-            <a href="https://x.com/Mr_prof_nft" target="_blank" class="team-member" style="text-decoration: none;">
-                <img class="profile-pic" src="image/Professor.jpg" alt="Professor">
-                <div class="team-name">Professor</div>
-                <div class="team-role">Co Founder</div>
-            </a>
-            <a href="https://x.com/SlixWeb3" target="_blank" class="team-member" style="text-decoration: none;">
-                <img class="profile-pic" src="image/Slix.jpg" alt="Slix">
-                <div class="team-name">Slix</div>
-                <div class="team-role">Co Founder</div>
-            </a>
-        </div>
-        <p style="text-align:center; margin-top:1.5rem; font-size:0.8rem; opacity:0.8;">👑 Click any profile to visit their X (Twitter)</p>
     </div>
 </div>
 
@@ -213,16 +236,10 @@
     const closeDiscord = document.querySelector('#discordModal .close-modal');
     discordRegBtn.onclick = () => discordModal.style.display = 'block';
     closeDiscord.onclick = () => discordModal.style.display = 'none';
-    const teamModal = document.getElementById('teamModal');
-    const teamBtn = document.getElementById('teamModalBtn');
-    const closeTeam = document.querySelector('#teamModal .close-modal');
-    teamBtn.onclick = () => teamModal.style.display = 'block';
-    closeTeam.onclick = () => teamModal.style.display = 'none';
     window.onclick = (e) => {
         if (e.target == discordModal) discordModal.style.display = 'none';
-        if (e.target == teamModal) teamModal.style.display = 'none';
     };
-    console.log('Team name color restored to #f0dbc0');
+    console.log('Team slideshow added, View Team button removed');
 </script>
 </body>
 </html>
