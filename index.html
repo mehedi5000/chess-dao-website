@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Chess DAO | Team Carousel (No Duplicates)</title>
+    <title>Chess DAO | Centered Team Carousel</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing: border-box; }
@@ -51,13 +51,19 @@
         .btn-primary { background:#8b5a2b; border-color:#c28a48; }
         .btn-primary:hover { background:#a56e38; transform:scale(1.03); }
 
-        /* Team Carousel (JavaScript-driven, no duplicates) */
+        /* Team Carousel – Centered */
         .team-slideshow, .projects-slideshow { margin-top:3rem; margin-bottom:2rem; }
         .section-title { text-align:center; font-size:2rem; margin-bottom:2rem; color:#f0dbc0; border-left:4px solid #b97f3a; padding-left:15px; display:inline-block; width:auto; margin-left:auto; margin-right:auto; }
+        .carousel-wrapper {
+            display: flex;
+            justify-content: center;
+        }
         .carousel-container {
             overflow: hidden;
             width: 100%;
+            max-width: 1200px;
             position: relative;
+            padding: 0 1rem;  /* gives breathing space */
         }
         .carousel-track {
             display: flex;
@@ -77,12 +83,11 @@
         .team-card .team-name { font-size:1.3rem; font-weight:bold; color:#f0dbc0; }
         .team-card .team-role { font-size:0.85rem; color:#d4b48c; margin-top:0.3rem; }
 
-        /* Project Slideshow (CSS infinite, duplicates fine for images) */
+        /* Project slideshow (unchanged) */
         .slider-container { overflow:hidden; width:100%; margin:1rem 0; }
         .slider-row { display:flex; gap:1.5rem; width:max-content; will-change:transform; transform:translateZ(0); backface-visibility:hidden; }
         .slider-row img { width:200px; height:200px; flex-shrink:0; object-fit:cover; border-radius:20px; border:2px solid #b97f3a; transition:transform 0.3s, box-shadow 0.3s; cursor:pointer; }
         .slider-row img:hover { transform:scale(1.05); box-shadow:0 10px 20px rgba(0,0,0,0.4); }
-
         @keyframes scrollLeft { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
         @keyframes scrollRight { 0% { transform:translateX(-50%); } 100% { transform:translateX(0); } }
         .scroll-left { animation:scrollLeft 60s linear infinite; }
@@ -130,33 +135,34 @@
         </div>
     </div>
 
-    <!-- Team Carousel (JavaScript infinite loop – no duplicate profiles) -->
+    <!-- Team Carousel – Centered, infinite, no duplicate profiles -->
     <div class="team-slideshow" data-aos="fade-up" data-aos-duration="800">
         <div style="text-align: center;">
             <div class="section-title">👑 Founding Team</div>
         </div>
-        <div class="carousel-container" id="teamCarousel">
-            <div class="carousel-track" id="teamTrack">
-                <!-- These 4 team members will be rotated infinitely -->
-                <div class="team-card" data-link="https://x.com/cubeonchain_">
-                    <img src="image/Cube.jpg" alt="Cube">
-                    <div class="team-name">Cube</div>
-                    <div class="team-role">Founder</div>
-                </div>
-                <div class="team-card" data-link="https://x.com/TopGangstar0">
-                    <img src="image/TopG.jpg" alt="TopG">
-                    <div class="team-name">TopG</div>
-                    <div class="team-role">Co Founder</div>
-                </div>
-                <div class="team-card" data-link="https://x.com/Mr_prof_nft">
-                    <img src="image/Professor.jpg" alt="Professor">
-                    <div class="team-name">Professor</div>
-                    <div class="team-role">Co Founder</div>
-                </div>
-                <div class="team-card" data-link="https://x.com/SlixWeb3">
-                    <img src="image/Slix.jpg" alt="Slix">
-                    <div class="team-name">Slix</div>
-                    <div class="team-role">Co Founder</div>
+        <div class="carousel-wrapper">
+            <div class="carousel-container" id="teamCarousel">
+                <div class="carousel-track" id="teamTrack">
+                    <div class="team-card" data-link="https://x.com/cubeonchain_">
+                        <img src="image/Cube.jpg" alt="Cube">
+                        <div class="team-name">Cube</div>
+                        <div class="team-role">Founder</div>
+                    </div>
+                    <div class="team-card" data-link="https://x.com/TopGangstar0">
+                        <img src="image/TopG.jpg" alt="TopG">
+                        <div class="team-name">TopG</div>
+                        <div class="team-role">Co Founder</div>
+                    </div>
+                    <div class="team-card" data-link="https://x.com/Mr_prof_nft">
+                        <img src="image/Professor.jpg" alt="Professor">
+                        <div class="team-name">Professor</div>
+                        <div class="team-role">Co Founder</div>
+                    </div>
+                    <div class="team-card" data-link="https://x.com/SlixWeb3">
+                        <img src="image/Slix.jpg" alt="Slix">
+                        <div class="team-name">Slix</div>
+                        <div class="team-role">Co Founder</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -230,11 +236,11 @@
         if (e.target == discordModal) discordModal.style.display = 'none';
     };
 
-    // ========== INFINITE CAROUSEL (no duplicates) – right to left ==========
+    // ========== INFINITE CAROUSEL (Centered, no duplicates, right to left) ==========
     const track = document.getElementById('teamTrack');
     const container = document.getElementById('teamCarousel');
     let position = 0;
-    let speed = 0.8;        // pixels per frame (adjust for speed)
+    let speed = 0.8;        // pixels per frame
     let animationId = null;
     let isPaused = false;
 
@@ -246,16 +252,13 @@
         position -= speed;
         track.style.transform = `translateX(${position}px)`;
 
-        // Get the first card element
         const firstCard = track.children[0];
         if (firstCard) {
             const firstRect = firstCard.getBoundingClientRect();
             const containerRect = container.getBoundingClientRect();
-            // When the right edge of the first card is completely left of the container's left edge
+            // Check if the first card has completely moved past the left edge of the visible container
             if (firstRect.right < containerRect.left) {
-                // Move the first card to the end
                 track.appendChild(firstCard);
-                // Adjust position by the width of the moved card + gap
                 const gap = parseFloat(getComputedStyle(track).gap) || 0;
                 const movedWidth = firstCard.offsetWidth + gap;
                 position += movedWidth;
@@ -265,7 +268,6 @@
         animationId = requestAnimationFrame(animate);
     }
 
-    // Start animation after layout is stable
     setTimeout(() => {
         if (track.children.length > 0) {
             position = 0;
@@ -274,23 +276,22 @@
         }
     }, 200);
 
-    // Pause on hover
     container.addEventListener('mouseenter', () => { isPaused = true; });
     container.addEventListener('mouseleave', () => { isPaused = false; });
 
-    // Make each team card clickable – open X profile
+    // Make team cards clickable
     const cards = document.querySelectorAll('.team-card');
     cards.forEach(card => {
         const link = card.getAttribute('data-link');
         if (link) {
-            card.addEventListener('click', (e) => {
-                // Prevent if clicking on link inside? But card itself is clickable.
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => {
                 window.open(link, '_blank');
             });
         }
     });
 
-    console.log('Team carousel active: only 4 unique members, infinite loop, no duplicates.');
+    console.log('Team carousel is now centered, infinite, no duplicates.');
 </script>
 </body>
 </html>
