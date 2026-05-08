@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Chess DAO | Decentralized Chess Community</title>
+    <title>Chess DAO | Collection Form</title>
     <style>
         * {
             margin: 0;
@@ -13,20 +13,19 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0f1e 0%, #0f172a 100%);
-            color: #e2e8f0;
+            background: linear-gradient(135deg, #2c1a0e 0%, #3e2a1b 100%);
+            color: #f5e6d3;
             line-height: 1.6;
             min-height: 100vh;
         }
 
-        /* subtle chess pattern background */
         .bg-pattern {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.03;
+            opacity: 0.05;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>');
             background-repeat: repeat;
             background-size: 40px;
@@ -51,7 +50,7 @@
             font-size: 4rem;
             margin-bottom: 1rem;
             display: inline-block;
-            background: rgba(255,255,255,0.05);
+            background: rgba(80, 50, 25, 0.6);
             padding: 0.5rem 1rem;
             border-radius: 60px;
             backdrop-filter: blur(4px);
@@ -59,7 +58,7 @@
 
         h1 {
             font-size: 2.8rem;
-            background: linear-gradient(135deg, #f5f3e8, #cbb26a);
+            background: linear-gradient(135deg, #f0dbc0, #b97f3a);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -69,16 +68,9 @@
 
         .tagline {
             font-size: 1.2rem;
-            color: #94a3b8;
+            color: #d4b48c;
             max-width: 600px;
             margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            margin: 2rem 0 1.5rem 0;
-            border-left: 4px solid #cbb26a;
-            padding-left: 1rem;
         }
 
         .main-grid {
@@ -89,18 +81,18 @@
         }
 
         .card {
-            background: rgba(20, 30, 45, 0.7);
+            background: rgba(60, 40, 25, 0.75);
             backdrop-filter: blur(8px);
             border-radius: 28px;
             padding: 1.8rem;
-            border: 1px solid rgba(255,215,0,0.2);
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.4);
+            border: 1px solid rgba(185, 127, 58, 0.4);
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
             transition: transform 0.2s ease;
         }
 
         .card:hover {
             transform: translateY(-5px);
-            border-color: rgba(203, 178, 106, 0.5);
+            border-color: rgba(210, 150, 75, 0.7);
         }
 
         .card h2 {
@@ -109,12 +101,12 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            border-left: 4px solid #cbb26a;
+            border-left: 4px solid #b97f3a;
             padding-left: 15px;
         }
 
         .discord-widget {
-            background: #1e2a3a;
+            background: #2a1a0c;
             border-radius: 20px;
             overflow: hidden;
             margin-top: 1rem;
@@ -139,45 +131,36 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: #2d3a4e;
-            color: white;
+            background: #4a2e18;
+            color: #f5e6d3;
             padding: 0.75rem 1.6rem;
             border-radius: 40px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.2s;
-            border: 1px solid rgba(203,178,106,0.3);
+            border: 1px solid rgba(185, 127, 58, 0.5);
             cursor: pointer;
         }
 
         .btn-primary {
-            background: #5865F2;
-            border-color: #7983f5;
+            background: #8b5a2b;
+            border-color: #c28a48;
         }
 
         .btn-primary:hover {
-            background: #4752c4;
+            background: #a56e38;
             transform: scale(1.02);
         }
 
         .btn-gold {
-            background: rgba(203, 178, 106, 0.2);
-            border: 1px solid #cbb26a;
-            color: #cbb26a;
+            background: rgba(139, 90, 43, 0.4);
+            border: 1px solid #b97f3a;
+            color: #f0dbc0;
         }
 
         .btn-gold:hover {
-            background: #cbb26a;
-            color: #0f172a;
-        }
-
-        .wallet-status {
-            background: #0f172a;
-            padding: 0.5rem 1rem;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            color: #cbb26a;
-            border: 1px solid rgba(203,178,106,0.3);
+            background: #b97f3a;
+            color: #2c1a0e;
         }
 
         .form-group {
@@ -190,23 +173,22 @@
             font-weight: 500;
         }
 
-        .form-group input, .form-group textarea {
+        .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             padding: 0.8rem;
             border-radius: 16px;
-            border: 1px solid rgba(203,178,106,0.3);
+            border: 1px solid rgba(185, 127, 58, 0.5);
             background: rgba(0,0,0,0.3);
-            color: white;
+            color: #f5e6d3;
             font-size: 1rem;
         }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
+        .form-group select option {
+            background: #3e2a1b;
         }
 
         .bot-status {
-            background: #0f172a;
+            background: #2a1a0c;
             border-radius: 20px;
             padding: 1rem;
             text-align: center;
@@ -221,80 +203,73 @@
         }
 
         .status-online {
-            background-color: #23d160;
-            box-shadow: 0 0 5px #23d160;
+            background-color: #6fcf97;
+            box-shadow: 0 0 5px #6fcf97;
         }
 
         .status-offline {
-            background-color: #ff3860;
-            box-shadow: 0 0 5px #ff3860;
+            background-color: #e74c3c;
+            box-shadow: 0 0 5px #e74c3c;
         }
 
         .mint-update {
-            background: #0f172a;
+            background: #2a1a0c;
             border-radius: 20px;
             padding: 1rem;
             margin-bottom: 1rem;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.2rem;
-            margin-top: 2rem;
-        }
-
-        .feature-item {
-            background: rgba(0,0,0,0.3);
-            padding: 1rem;
-            border-radius: 20px;
-            text-align: center;
-            font-size: 0.95rem;
-        }
-
-        .feature-emoji {
-            font-size: 2rem;
-            display: block;
-            margin-bottom: 0.5rem;
         }
 
         footer {
             text-align: center;
             margin-top: 3rem;
             padding-top: 1.5rem;
-            border-top: 1px solid rgba(203,178,106,0.2);
+            border-top: 1px solid rgba(185, 127, 58, 0.3);
             font-size: 0.85rem;
-            color: #64748b;
+            color: #bc9a6b;
         }
 
-        @media (max-width: 750px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-            .logo {
-                font-size: 2.8rem;
-            }
-            .container {
-                padding: 1.5rem;
-            }
+        /* Modal styles for collection form */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
         }
 
-        .info-note {
-            background: #0f172ab3;
-            border-radius: 16px;
-            padding: 0.8rem;
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            border-left: 3px solid #cbb26a;
+        .modal-content {
+            background: #3e2a1b;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 28px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid #b97f3a;
+            box-shadow: 0 20px 35px -12px black;
         }
-        code {
-            background: #00000055;
-            padding: 0.2rem 0.4rem;
-            border-radius: 8px;
-            font-family: monospace;
+
+        .modal-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #f0dbc0;
+            border-left: 4px solid #b97f3a;
+            padding-left: 15px;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #d4b48c;
+        }
+
+        .close-modal:hover {
+            color: #f5e6d3;
         }
     </style>
 </head>
@@ -309,20 +284,17 @@
 
     <!-- Feature Grid 1 -->
     <div class="main-grid">
-        <!-- 1. Wallet Connection -->
+        <!-- NEW: Collection Button (replaces wallet) -->
         <div class="card">
-            <h2><span>🔗</span> Wallet Connection</h2>
-            <p>Connect your crypto wallet to unlock Web3 features, voting, and NFT rewards.</p>
+            <h2><span>📦</span> Collection</h2>
+            <p>Click below to register your project for the Chess DAO collection. Choose your role: OG, GTD, or FCFS.</p>
             <div class="btn-group">
-                <button id="connectWalletBtn" class="btn btn-primary">🔐 Connect Wallet</button>
-                <div id="walletInfo" class="wallet-status" style="display:none;">
-                    <span id="walletAddress"></span>
-                </div>
+                <button id="collectionBtn" class="btn btn-primary">📋 Open Collection Form</button>
             </div>
-            <div id="walletStatus" style="font-size:0.8rem; margin-top:0.5rem;"></div>
+            <div id="collectionStatus" style="font-size:0.8rem; margin-top:1rem;"></div>
         </div>
 
-        <!-- 2. Member Form -->
+        <!-- Member Form (unchanged) -->
         <div class="card">
             <h2><span>📝</span> Member Form</h2>
             <p>Fill this form to get access to Chess DAO private channels and updates.</p>
@@ -344,7 +316,7 @@
             </form>
         </div>
 
-        <!-- 3. Discord Access + Widget -->
+        <!-- Discord Access + Widget (unchanged) -->
         <div class="card">
             <h2><span>🎮</span> Discord Access</h2>
             <p>Join the Chess DAO Discord server and chat live with members.</p>
@@ -364,9 +336,8 @@
         </div>
     </div>
 
-    <!-- Feature Grid 2 -->
+    <!-- Feature Grid 2 (unchanged) -->
     <div class="main-grid">
-        <!-- 4. Mint Update -->
         <div class="card">
             <h2><span>✨</span> Mint Update</h2>
             <p>Latest information about Chess DAO NFT mints and collection stats.</p>
@@ -379,7 +350,6 @@
             <button id="refreshMintData" class="btn btn-gold">🔄 Refresh Data</button>
         </div>
 
-        <!-- 5. Bot Checker -->
         <div class="card">
             <h2><span>🤖</span> Bot Checker</h2>
             <p>Real-time status of the Chess DAO Discord bot. You can connect your own bot API.</p>
@@ -396,60 +366,102 @@
 
     <footer>
         <p>♞ Chess DAO — An open decentralized chess community | Free & open source website</p>
-        <p style="margin-top: 10px;">🔧 <strong>Configuration:</strong> Replace <code>YOUR_SERVER_ID</code>, <code>YOUR_INVITE_CODE</code>, <code>YOUR_DISCORD_CLIENT_ID</code> and <code>YOUR_BOT_API_URL</code> inside the script below.</p>
+        <p style="margin-top: 10px;">🔧 <strong>Configuration:</strong> Replace YOUR_SERVER_ID, YOUR_INVITE_CODE, YOUR_DISCORD_CLIENT_ID, YOUR_WEB3FORMS_KEY, and YOUR_BOT_API_URL in the script.</p>
     </footer>
 </div>
 
-<script>
-    // ==================== 1. WALLET CONNECTION (MetaMask) ====================
-    let currentAccount = null;
-    const connectWalletBtn = document.getElementById('connectWalletBtn');
-    const walletInfo = document.getElementById('walletInfo');
-    const walletAddressSpan = document.getElementById('walletAddress');
-    const walletStatusDiv = document.getElementById('walletStatus');
+<!-- Modal for Collection Form -->
+<div id="collectionModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Collection Registration</h3>
+        <form id="collectionForm">
+            <div class="form-group">
+                <label for="projectName">Project Name *</label>
+                <input type="text" id="projectName" required placeholder="e.g., Chess Master NFT">
+            </div>
+            <div class="form-group">
+                <label for="walletAddress">Wallet Address *</label>
+                <input type="text" id="walletAddress" required placeholder="0x... or your wallet address">
+            </div>
+            <div class="form-group">
+                <label for="role">Role *</label>
+                <select id="role" required>
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="OG">OG</option>
+                    <option value="GTD">GTD</option>
+                    <option value="FCFS">FCFS</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Submit Collection</button>
+        </form>
+        <div id="collectionFormStatus" style="margin-top:1rem; font-size:0.8rem; text-align:center;"></div>
+    </div>
+</div>
 
-    async function connectWallet() {
-        if (typeof window.ethereum !== 'undefined') {
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                currentAccount = accounts[0];
-                walletAddressSpan.textContent = `🔗 ${currentAccount.slice(0, 6)}...${currentAccount.slice(-4)}`;
-                walletInfo.style.display = 'block';
-                walletStatusDiv.textContent = '✅ Wallet connected successfully!';
-                connectWalletBtn.textContent = '✅ Connected';
-                connectWalletBtn.disabled = true;
-            } catch (error) {
-                walletStatusDiv.textContent = '❌ Connection failed.';
-                console.error(error);
-            }
-        } else {
-            walletStatusDiv.textContent = '⚠️ Please install MetaMask extension.';
+<script>
+    // ==================== COLLECTION MODAL LOGIC ====================
+    const modal = document.getElementById('collectionModal');
+    const collectionBtn = document.getElementById('collectionBtn');
+    const closeModal = document.querySelector('.close-modal');
+    const collectionForm = document.getElementById('collectionForm');
+    const collectionStatusDiv = document.getElementById('collectionStatus');
+    const collectionFormStatus = document.getElementById('collectionFormStatus');
+
+    // Open modal
+    collectionBtn.onclick = function() {
+        modal.style.display = 'block';
+        collectionFormStatus.innerHTML = '';
+    }
+
+    // Close modal when clicking (x)
+    closeModal.onclick = function() {
+        modal.style.display = 'none';
+        collectionForm.reset();
+        collectionFormStatus.innerHTML = '';
+    }
+
+    // Close modal if click outside content
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+            collectionForm.reset();
+            collectionFormStatus.innerHTML = '';
         }
     }
 
-    connectWalletBtn.addEventListener('click', connectWallet);
+    // Handle collection form submission
+    collectionForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const projectName = document.getElementById('projectName').value;
+        const walletAddress = document.getElementById('walletAddress').value;
+        const role = document.getElementById('role').value;
 
-    if (typeof window.ethereum !== 'undefined') {
-        window.ethereum.on('accountsChanged', (accounts) => {
-            if (accounts.length === 0) {
-                currentAccount = null;
-                walletInfo.style.display = 'none';
-                walletStatusDiv.textContent = '🔴 Wallet disconnected.';
-                connectWalletBtn.textContent = '🔐 Connect Wallet';
-                connectWalletBtn.disabled = false;
-            } else {
-                currentAccount = accounts[0];
-                walletAddressSpan.textContent = `🔗 ${currentAccount.slice(0, 6)}...${currentAccount.slice(-4)}`;
-                walletInfo.style.display = 'block';
-                walletStatusDiv.textContent = '✅ Wallet changed.';
-            }
-        });
-    }
+        if (!projectName || !walletAddress || !role) {
+            collectionFormStatus.innerHTML = '❌ Please fill all fields.';
+            return;
+        }
 
-    // ==================== 2. FORM SUBMISSION (Web3Forms demo) ====================
+        // Simulate sending data (you can replace with Web3Forms or your API)
+        console.log('Collection Data:', { projectName, walletAddress, role });
+        collectionFormStatus.innerHTML = '✅ Collection registration submitted! We will contact you soon.';
+        collectionForm.reset();
+
+        // Show status in the card as well
+        collectionStatusDiv.innerHTML = `✅ Last submission: ${projectName} (${role}) - Wallet: ${walletAddress.slice(0,6)}...`;
+
+        // Close modal after 2 seconds
+        setTimeout(() => {
+            modal.style.display = 'none';
+            collectionFormStatus.innerHTML = '';
+        }, 2000);
+    });
+
+    // ==================== OTHER EXISTING FEATURES ====================
+    // 1. Member Form (Web3Forms)
     const form = document.getElementById('memberForm');
     const formStatus = document.getElementById('formStatus');
-    const WEB3FORMS_KEY = 'YOUR_WEB3FORMS_KEY';  // replace with your key from web3forms.com
+    const WEB3FORMS_KEY = 'YOUR_WEB3FORMS_KEY';
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -486,16 +498,16 @@
         }
     });
 
-    // ==================== 3. DISCORD OAUTH LOGIN ====================
+    // 2. Discord Login
     const discordLoginBtn = document.getElementById('discordLoginBtn');
     const discordUserInfoDiv = document.getElementById('discordUserInfo');
-    const DISCORD_CLIENT_ID = 'YOUR_DISCORD_CLIENT_ID';  // replace with your app's client ID
+    const DISCORD_CLIENT_ID = 'YOUR_DISCORD_CLIENT_ID';
     const REDIRECT_URI = encodeURIComponent(window.location.href);
     const DISCORD_OAUTH_URL = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=identify`;
 
     discordLoginBtn.addEventListener('click', () => {
         if (DISCORD_CLIENT_ID === 'YOUR_DISCORD_CLIENT_ID') {
-            discordUserInfoDiv.innerHTML = '<span style="color:orange;">⚠️ Set your Discord Client ID in the code.</span>';
+            discordUserInfoDiv.innerHTML = '<span style="color:#e6c8a0;">⚠️ Set your Discord Client ID in the code.</span>';
             return;
         }
         window.open(DISCORD_OAUTH_URL, 'Discord Login', 'width=500,height=700');
@@ -518,7 +530,7 @@
     }
     handleDiscordRedirect();
 
-    // ==================== 4. MINT UPDATE (demo + refresh) ====================
+    // 3. Mint Update
     const lastMintSpan = document.getElementById('lastMint');
     const currentPriceSpan = document.getElementById('currentPrice');
     const totalMintsSpan = document.getElementById('totalMints');
@@ -528,23 +540,21 @@
         lastMintSpan.textContent = 'Loading...';
         currentPriceSpan.textContent = 'Loading...';
         totalMintsSpan.textContent = 'Loading...';
-        // Simulate API call – replace with real NFT API (e.g. Alchemy)
         setTimeout(() => {
             lastMintSpan.textContent = new Date().toLocaleString();
             currentPriceSpan.textContent = '0.05 ETH';
             totalMintsSpan.textContent = Math.floor(Math.random() * 1000) + 1;
         }, 800);
     }
-
     refreshMintDataBtn.addEventListener('click', fetchMintData);
     fetchMintData();
 
-    // ==================== 5. BOT CHECKER (custom API endpoint) ====================
+    // 4. Bot Checker
     const botStatusText = document.getElementById('botStatusText');
     const botStatusIndicator = document.querySelector('#botStatusDisplay .status-indicator');
     const lastCheckedSpan = document.getElementById('lastChecked');
     const refreshBotStatusBtn = document.getElementById('refreshBotStatus');
-    const BOT_API_URL = 'YOUR_BOT_API_HEALTH_ENDPOINT';  // replace with your bot's health endpoint
+    const BOT_API_URL = 'YOUR_BOT_API_HEALTH_ENDPOINT';
 
     async function checkBotStatus() {
         lastCheckedSpan.textContent = new Date().toLocaleTimeString();
@@ -564,7 +574,6 @@
                 botStatusIndicator.className = 'status-indicator status-offline';
             }
         } else {
-            // Demo mode: random status
             const randomOnline = Math.random() > 0.3;
             if (randomOnline) {
                 botStatusText.textContent = 'Bot Online 🟢 (demo)';
@@ -575,11 +584,10 @@
             }
         }
     }
-
     refreshBotStatusBtn.addEventListener('click', checkBotStatus);
     checkBotStatus();
 
-    console.log("Chess DAO Enhanced Website Loaded - All features ready.");
+    console.log("Chess DAO with Collection Form Loaded.");
 </script>
 </body>
 </html>
