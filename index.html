@@ -51,10 +51,12 @@
         .btn-primary { background:#8b5a2b; border-color:#c28a48; }
         .btn-primary:hover { background:#a56e38; transform:scale(1.03); }
 
-        /* Team Carousel – centered group, infinite, no duplicates */
+        /* Team Carousel – CSS flex centering + JS infinite loop */
         .team-slideshow, .projects-slideshow { margin-top:3rem; margin-bottom:2rem; }
         .section-title { text-align:center; font-size:2rem; margin-bottom:2rem; color:#f0dbc0; border-left:4px solid #b97f3a; padding-left:15px; display:inline-block; width:auto; margin-left:auto; margin-right:auto; }
         .carousel-container {
+            display: flex;
+            justify-content: center;
             overflow: hidden;
             width: 100%;
             position: relative;
@@ -129,7 +131,7 @@
         </div>
     </div>
 
-    <!-- Team Carousel – Centered group, infinite, no duplicates -->
+    <!-- Team Carousel – centered via flex, infinite loop, no duplicates -->
     <div class="team-slideshow" data-aos="fade-up" data-aos-duration="800">
         <div style="text-align: center;">
             <div class="section-title">👑 Founding Team</div>
@@ -228,37 +230,19 @@
         if (e.target == discordModal) discordModal.style.display = 'none';
     };
 
-    // ========== CENTERED INFINITE CAROUSEL (no duplicates) ==========
+    // ========== INFINITE CAROUSEL with CSS Flex Centering ==========
     const track = document.getElementById('teamTrack');
     const container = document.getElementById('teamCarousel');
     let position = 0;
-    let speed = 0.8;          // pixels per frame
+    let speed = 0.8;          // pixels per frame (adjust for smoothness)
     let animationId = null;
     let isPaused = false;
-    let totalWidth = 0;
-    let containerWidth = 0;
 
-    function updateDimensions() {
-        if (!track || track.children.length === 0) return;
-        const cards = track.children;
-        let total = 0;
+    function getCardTotalWidth() {
+        if (track.children.length === 0) return 0;
+        const card = track.children[0];
         const gap = parseFloat(getComputedStyle(track).gap) || 0;
-        for (let i = 0; i < cards.length; i++) {
-            total += cards[i].offsetWidth;
-            if (i < cards.length - 1) total += gap;
-        }
-        totalWidth = total;
-        containerWidth = container.clientWidth;
-    }
-
-    function centerInitial() {
-        updateDimensions();
-        if (totalWidth >= containerWidth) {
-            position = (containerWidth - totalWidth) / 2;
-        } else {
-            position = 0;
-        }
-        track.style.transform = `translateX(${position}px)`;
+        return card.offsetWidth + gap;
     }
 
     function animate() {
@@ -273,12 +257,10 @@
         if (firstCard) {
             const firstRect = firstCard.getBoundingClientRect();
             const containerRect = container.getBoundingClientRect();
-            // When the whole first card is completely left of the container
+            // When the whole first card is completely left of the container's left edge
             if (firstRect.right < containerRect.left) {
                 track.appendChild(firstCard);
-                const cardWidth = firstCard.offsetWidth;
-                const gap = parseFloat(getComputedStyle(track).gap) || 0;
-                const movedWidth = cardWidth + gap;
+                const movedWidth = getCardTotalWidth();
                 position += movedWidth;
                 track.style.transform = `translateX(${position}px)`;
             }
@@ -286,21 +268,16 @@
         animationId = requestAnimationFrame(animate);
     }
 
-    // Start after layout
+    // Start animation after layout
     setTimeout(() => {
         if (track.children.length) {
-            centerInitial();
+            position = 0;
+            track.style.transform = 'translateX(0px)';
             animationId = requestAnimationFrame(animate);
         }
     }, 200);
 
-    // Re-center on resize
-    window.addEventListener('resize', () => {
-        if (track.children.length) {
-            centerInitial();
-        }
-    });
-
+    // Pause on hover
     container.addEventListener('mouseenter', () => { isPaused = true; });
     container.addEventListener('mouseleave', () => { isPaused = false; });
 
@@ -316,7 +293,7 @@
         }
     });
 
-    console.log('Team carousel centered, infinite, no duplicates.');
+    console.log('Team carousel now perfectly centered via flexbox, infinite loop, no duplicates.');
 </script>
 </body>
 </html>
