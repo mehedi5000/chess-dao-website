@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Chess DAO | Team Profiles</title>
+    <title>Chess DAO | Team Profiles Centered</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing: border-box; }
@@ -42,7 +42,22 @@
             will-change:transform;
         }
         .tagline { font-size:1.2rem; color:#d4b48c; max-width:600px; margin:0.5rem auto 0; }
-        .main-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(350px,1fr)); gap:2rem; margin-bottom:3rem; }
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        /* For the second grid (now only one card) we overwrite the grid to center it */
+        .single-card-grid {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        .single-card-grid .card {
+            max-width: 500px;
+            width: 100%;
+        }
         .card {
             background:rgba(60,40,25,0.75); backdrop-filter:blur(8px); border-radius:28px;
             padding:1.8rem; border:1px solid rgba(185,127,58,0.4);
@@ -62,11 +77,8 @@
         .btn-primary:hover { background:#a56e38; transform:scale(1.03); }
         .btn-gold { background:rgba(139,90,43,0.4); border-color:#b97f3a; color:#f0dbc0; }
         .btn-gold:hover { background:#b97f3a; color:#2c1a0e; transform:scale(1.03); }
-        .bot-status { background:#2a1a0c; border-radius:20px; padding:1rem; text-align:center; }
-        .status-indicator { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:8px; }
-        .status-online { background-color:#6fcf97; box-shadow:0 0 5px #6fcf97; }
-        .status-offline { background-color:#e74c3c; box-shadow:0 0 5px #e74c3c; }
         footer { text-align:center; margin-top:3rem; padding-top:1.5rem; border-top:1px solid rgba(185,127,58,0.3); font-size:0.85rem; color:#bc9a6b; }
+        /* Modal styles */
         .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.7); backdrop-filter:blur(5px); }
         .modal-content { background:#3e2a1b; margin:5% auto; padding:2rem; border-radius:28px; width:90%; max-width:700px; border:1px solid #b97f3a; animation:modalFadeIn 0.3s cubic-bezier(0.2,0.9,0.4,1.1); }
         @keyframes modalFadeIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
@@ -79,10 +91,10 @@
         .team-name { font-size:1.3rem; font-weight:bold; color:#f0dbc0; }
         .team-role { font-size:0.9rem; color:#d4b48c; margin-top:0.3rem; }
         @keyframes fadeSlideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        .header, .main-grid, footer { animation:fadeSlideUp 0.8s cubic-bezier(0.2,0.9,0.4,1.1) forwards; opacity:0; }
+        .header, .main-grid, .single-card-grid, footer { animation:fadeSlideUp 0.8s cubic-bezier(0.2,0.9,0.4,1.1) forwards; opacity:0; }
         .header { animation-delay:0.1s; }
         .main-grid:first-of-type { animation-delay:0.2s; }
-        .main-grid:last-of-type { animation-delay:0.3s; }
+        .single-card-grid { animation-delay:0.3s; }
         footer { animation-delay:0.4s; }
     </style>
 </head>
@@ -94,7 +106,7 @@
         <div class="tagline">Decentralized community for chess lovers — play, learn, and govern together</div>
     </div>
 
-    <!-- First grid: Twitter & Discord Registration -->
+    <!-- First grid: Twitter & Discord Registration (two cards side by side) -->
     <div class="main-grid">
         <div class="card" data-aos="fade-up" data-aos-duration="800">
             <h2><span>🐦</span> Twitter / X</h2>
@@ -113,22 +125,13 @@
         </div>
     </div>
 
-    <!-- Second grid: Team Profiles & Bot Checker -->
-    <div class="main-grid">
-        <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+    <!-- Second grid: Team Profiles card only, centered -->
+    <div class="single-card-grid">
+        <div class="card" data-aos="fade-up" data-aos-duration="800">
             <h2><span>👥</span> Team Profiles</h2>
             <p>Meet the founders and core team behind Chess DAO. Click on any profile to visit their X (Twitter).</p>
             <div class="btn-group">
                 <button id="teamModalBtn" class="btn btn-primary">👥 View Team</button>
-            </div>
-        </div>
-        <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
-            <h2><span>🤖</span> Bot Checker</h2>
-            <p>Real-time status of the Chess DAO Discord bot.</p>
-            <div class="bot-status">
-                <div><span class="status-indicator status-offline"></span><span id="botStatusText">Checking...</span></div>
-                <p>Last checked: <span id="lastChecked">-</span></p>
-                <button id="refreshBotStatus" class="btn btn-gold">Check Now</button>
             </div>
         </div>
     </div>
@@ -148,7 +151,7 @@
     </div>
 </div>
 
-<!-- Team Profiles Modal (clickable profiles with image folder "image/") -->
+<!-- Team Profiles Modal -->
 <div id="teamModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
@@ -197,44 +200,13 @@
     teamBtn.onclick = () => teamModal.style.display = 'block';
     closeTeam.onclick = () => teamModal.style.display = 'none';
 
+    // Click outside close modals
     window.onclick = (e) => {
         if (e.target == discordModal) discordModal.style.display = 'none';
         if (e.target == teamModal) teamModal.style.display = 'none';
     };
 
-    // Bot Checker
-    const botText = document.getElementById('botStatusText');
-    const botInd = document.querySelector('#botStatusDisplay .status-indicator');
-    const lastCheckedSpan = document.getElementById('lastChecked');
-    const refreshBot = document.getElementById('refreshBotStatus');
-    const BOT_API = 'YOUR_BOT_API_HEALTH_ENDPOINT';
-    async function checkBot() {
-        lastCheckedSpan.innerText = new Date().toLocaleTimeString();
-        botText.innerText = 'Checking...';
-        if (BOT_API && BOT_API !== 'YOUR_BOT_API_HEALTH_ENDPOINT') {
-            try {
-                const res = await fetch(BOT_API);
-                if (res.ok) {
-                    botText.innerText = 'Bot Online 🟢';
-                    botInd.className = 'status-indicator status-online';
-                } else {
-                    botText.innerText = 'Bot Offline 🔴';
-                    botInd.className = 'status-indicator status-offline';
-                }
-            } catch(e) {
-                botText.innerText = 'Bot Offline 🔴';
-                botInd.className = 'status-indicator status-offline';
-            }
-        } else {
-            const rand = Math.random() > 0.3;
-            botText.innerText = rand ? 'Bot Online 🟢 (demo)' : 'Bot Offline 🔴 (demo)';
-            botInd.className = rand ? 'status-indicator status-online' : 'status-indicator status-offline';
-        }
-    }
-    refreshBot.addEventListener('click', checkBot);
-    checkBot();
-
-    console.log('Chess DAO: Images loaded from "image/" folder.');
+    console.log('Chess DAO: Bot checker removed, Team Profiles card centered.');
 </script>
 </body>
 </html>
