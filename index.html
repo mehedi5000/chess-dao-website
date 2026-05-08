@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Chess DAO | Centered Buttons with Spacing</title>
+    <title>Chess DAO | Collaboration Slideshow</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing: border-box; }
@@ -70,16 +70,16 @@
         .btn-group {
             display: flex;
             justify-content: center;
-            margin-top: 2rem;      /* 👈 বাটনকে নিচে নামানো */
+            margin-top: 2rem;
         }
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;             /* 👈 আইকন ও টেক্সটের মাঝে ফাঁকা */
+            gap: 12px;
             background: #4a2e18;
             color: #f5e6d3;
-            padding: 0.9rem 2rem;  /* 👈 বাটন সাইজ বড় করা */
+            padding: 0.9rem 2rem;
             border-radius: 60px;
             font-weight: 600;
             font-size: 1rem;
@@ -94,6 +94,64 @@
         .btn-gold { background: rgba(139,90,43,0.4); border-color: #b97f3a; color: #f0dbc0; }
         .btn-gold:hover { background: #b97f3a; color: #2c1a0e; transform: scale(1.03); }
 
+        /* Slideshow Section */
+        .projects-slideshow {
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+        }
+        .projects-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #f0dbc0;
+            border-left: 4px solid #b97f3a;
+            padding-left: 15px;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .slider-container {
+            overflow: hidden;
+            width: 100%;
+            margin: 1rem 0;
+        }
+        .slider-row {
+            display: flex;
+            gap: 1.5rem;
+            width: max-content;
+            will-change: transform;
+            margin-bottom: 1.5rem;
+        }
+        .slider-row img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 2px solid #b97f3a;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .slider-row img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+        /* Two rows: first left-to-right (infinite), second right-to-left (infinite) */
+        @keyframes scrollLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        @keyframes scrollRight {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+        .scroll-left {
+            animation: scrollLeft 30s linear infinite;
+        }
+        .scroll-right {
+            animation: scrollRight 30s linear infinite;
+        }
+
         footer { text-align:center; margin-top:3rem; padding-top:1.5rem; border-top:1px solid rgba(185,127,58,0.3); font-size:0.85rem; color:#bc9a6b; }
         .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.7); backdrop-filter:blur(5px); }
         .modal-content { background:#3e2a1b; margin:5% auto; padding:2rem; border-radius:28px; width:90%; max-width:700px; border:1px solid #b97f3a; animation:modalFadeIn 0.3s cubic-bezier(0.2,0.9,0.4,1.1); }
@@ -104,14 +162,14 @@
         .team-member { text-align:center; background:rgba(0,0,0,0.5); border-radius:20px; padding:1rem; transition:transform 0.2s; cursor:pointer; }
         .team-member:hover { transform:scale(1.02); background:rgba(185,127,58,0.3); }
         .profile-pic { width:120px; height:120px; border-radius:50%; object-fit:cover; margin-bottom:1rem; border:2px solid #b97f3a; background:#2c1a0e; }
-        .team-name { font-size:1.3rem; font-weight:bold; color:#f0dbc0; }
-        .team-role { font-size:0.9rem; color:#d4b48c; margin-top:0.3rem; }
+
         @keyframes fadeSlideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        .header, .main-grid, .single-card-grid, footer { animation:fadeSlideUp 0.8s cubic-bezier(0.2,0.9,0.4,1.1) forwards; opacity:0; }
+        .header, .main-grid, .single-card-grid, .projects-slideshow, footer { animation:fadeSlideUp 0.8s cubic-bezier(0.2,0.9,0.4,1.1) forwards; opacity:0; }
         .header { animation-delay:0.1s; }
         .main-grid:first-of-type { animation-delay:0.2s; }
         .single-card-grid { animation-delay:0.3s; }
-        footer { animation-delay:0.4s; }
+        .projects-slideshow { animation-delay:0.4s; }
+        footer { animation-delay:0.5s; }
     </style>
 </head>
 <body>
@@ -147,6 +205,49 @@
             <p>Meet the founders and core team behind Chess DAO. Click on any profile to visit their X (Twitter).</p>
             <div class="btn-group">
                 <button id="teamModalBtn" class="btn btn-primary">👥 View Team</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collaboration Projects Slideshow Section -->
+    <div class="projects-slideshow">
+        <div style="text-align: center;">
+            <div class="projects-title">🤝 Our Collaboration Projects</div>
+        </div>
+        <!-- First row: 6 images sliding left to right? Actually we want 6 images right->left (scroll-left) and other 6 left->right (scroll-right) -->
+        <!-- We have 12 images total. We'll split into two sets of 6 each. Duplicate to make seamless loop -->
+        <div class="slider-container">
+            <div class="slider-row scroll-left">
+                <img src="projects/P1.jpg" alt="Project 1" loading="lazy">
+                <img src="projects/P2.jpg" alt="Project 2" loading="lazy">
+                <img src="projects/P3.jpg" alt="Project 3" loading="lazy">
+                <img src="projects/P4.jpg" alt="Project 4" loading="lazy">
+                <img src="projects/P5.jpg" alt="Project 5" loading="lazy">
+                <img src="projects/P6.jpg" alt="Project 6" loading="lazy">
+                <!-- duplicate for seamless loop -->
+                <img src="projects/P1.jpg" alt="Project 1" loading="lazy">
+                <img src="projects/P2.jpg" alt="Project 2" loading="lazy">
+                <img src="projects/P3.jpg" alt="Project 3" loading="lazy">
+                <img src="projects/P4.jpg" alt="Project 4" loading="lazy">
+                <img src="projects/P5.jpg" alt="Project 5" loading="lazy">
+                <img src="projects/P6.jpg" alt="Project 6" loading="lazy">
+            </div>
+        </div>
+        <div class="slider-container">
+            <div class="slider-row scroll-right">
+                <img src="projects/P7.jpg" alt="Project 7" loading="lazy">
+                <img src="projects/P8.jpg" alt="Project 8" loading="lazy">
+                <img src="projects/P9.jpg" alt="Project 9" loading="lazy">
+                <img src="projects/P10.jpg" alt="Project 10" loading="lazy">
+                <img src="projects/P11.jpg" alt="Project 11" loading="lazy">
+                <img src="projects/P12.jpg" alt="Project 12" loading="lazy">
+                <!-- duplicate -->
+                <img src="projects/P7.jpg" alt="Project 7" loading="lazy">
+                <img src="projects/P8.jpg" alt="Project 8" loading="lazy">
+                <img src="projects/P9.jpg" alt="Project 9" loading="lazy">
+                <img src="projects/P10.jpg" alt="Project 10" loading="lazy">
+                <img src="projects/P11.jpg" alt="Project 11" loading="lazy">
+                <img src="projects/P12.jpg" alt="Project 12" loading="lazy">
             </div>
         </div>
     </div>
@@ -217,7 +318,17 @@
         if (e.target == discordModal) discordModal.style.display = 'none';
         if (e.target == teamModal) teamModal.style.display = 'none';
     };
-    console.log('Buttons improved: centered, bigger, more spacing.');
+
+    // optional: stop animation on hover to improve usability
+    const sliders = document.querySelectorAll('.slider-row');
+    sliders.forEach(slider => {
+        slider.addEventListener('mouseenter', () => {
+            slider.style.animationPlayState = 'paused';
+        });
+        slider.addEventListener('mouseleave', () => {
+            slider.style.animationPlayState = 'running';
+        });
+    });
 </script>
 </body>
 </html>
