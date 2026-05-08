@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Chess DAO | Updated</title>
+    <title>Chess DAO | Final</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing: border-box; }
@@ -67,24 +67,19 @@
         .btn-primary:hover { background:#a56e38; transform:scale(1.03); }
         .btn-gold { background:rgba(139,90,43,0.4); border-color:#b97f3a; color:#f0dbc0; }
         .btn-gold:hover { background:#b97f3a; color:#2c1a0e; transform:scale(1.03); }
-        .form-group { margin-bottom:1.2rem; }
-        .form-group label { display:block; margin-bottom:0.5rem; font-weight:500; }
-        .form-group input, .form-group textarea, .form-group select {
-            width:100%; padding:0.8rem; border-radius:16px;
-            border:1px solid rgba(185,127,58,0.5); background:rgba(0,0,0,0.3);
-            color:#f5e6d3; font-size:1rem;
-        }
         .bot-status { background:#2a1a0c; border-radius:20px; padding:1rem; text-align:center; }
         .status-indicator { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:8px; }
         .status-online { background-color:#6fcf97; box-shadow:0 0 5px #6fcf97; }
         .status-offline { background-color:#e74c3c; box-shadow:0 0 5px #e74c3c; }
         .mint-update { background:#2a1a0c; border-radius:20px; padding:1rem; margin-bottom:1rem; }
         footer { text-align:center; margin-top:3rem; padding-top:1.5rem; border-top:1px solid rgba(185,127,58,0.3); font-size:0.85rem; color:#bc9a6b; }
+        /* Modal */
         .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.7); backdrop-filter:blur(5px); }
-        .modal-content { background:#3e2a1b; margin:10% auto; padding:2rem; border-radius:28px; width:90%; max-width:500px; border:1px solid #b97f3a; animation:modalFadeIn 0.3s cubic-bezier(0.2,0.9,0.4,1.1); }
+        .modal-content { background:#3e2a1b; margin:10% auto; padding:2rem; border-radius:28px; width:90%; max-width:600px; border:1px solid #b97f3a; animation:modalFadeIn 0.3s cubic-bezier(0.2,0.9,0.4,1.1); }
         @keyframes modalFadeIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
         .close-modal { float:right; font-size:2rem; font-weight:bold; cursor:pointer; color:#d4b48c; }
         .close-modal:hover { color:#f5e6d3; }
+        .form-iframe { width:100%; height:500px; border:none; border-radius:20px; margin-top:1rem; }
         @keyframes fadeSlideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
         .header, .main-grid, footer { animation:fadeSlideUp 0.8s cubic-bezier(0.2,0.9,0.4,1.1) forwards; opacity:0; }
         .header { animation-delay:0.1s; }
@@ -113,10 +108,10 @@
             </div>
         </div>
 
-        <!-- Discord Registration Card -->
+        <!-- Discord Registration Card (opens Google Form modal) -->
         <div class="card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
             <h2><span>💬</span> Discord Registration</h2>
-            <p>Join our Discord server by registering below. Fill out the form to get access.</p>
+            <p>Join our Discord server by registering below. Click the button to open the registration form.</p>
             <div class="btn-group">
                 <button id="discordRegBtn" class="btn btn-primary">🎮 Register with Discord</button>
             </div>
@@ -150,31 +145,16 @@
 
     <footer data-aos="fade-up" data-aos-duration="600">
         <p> — An open decentralized chess community | Free & open source website</p>
-        <p>🔧 Discord registrations are saved to Google Sheets.</p>
+        <p>🔧 Discord registrations are handled via Google Form.</p>
     </footer>
 </div>
 
-<!-- Modal for Discord Registration -->
+<!-- Modal with Google Form Embed -->
 <div id="discordModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
         <h3>Discord Registration</h3>
-        <form id="discordRegForm">
-            <div class="form-group">
-                <label>Full Name *</label>
-                <input type="text" id="fullName" required placeholder="Your full name">
-            </div>
-            <div class="form-group">
-                <label>Email *</label>
-                <input type="email" id="emailReg" required placeholder="you@example.com">
-            </div>
-            <div class="form-group">
-                <label>Discord Username *</label>
-                <input type="text" id="discordUser" required placeholder="e.g., player#1234">
-            </div>
-            <button type="submit" class="btn btn-primary" style="width:100%;">Submit Registration</button>
-        </form>
-        <div id="discordFormStatus" style="margin-top:1rem; font-size:0.8rem; text-align:center;"></div>
+        <iframe class="form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSc6zmP1DqTjcgKHIaw4U1rvu-08Ac7J7jM7LfVMSMs8VAf-Gw/viewform?embedded=true"></iframe>
     </div>
 </div>
 
@@ -182,72 +162,32 @@
 <script>
     AOS.init({ once: false, mirror: true, duration: 800, easing: 'ease-out-cubic', offset: 80 });
 
-    // Google Sheets Web App URL (replace with your deployed URL)
-    const GOOGLE_SHEETS_WEBAPP_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL";
-
-    // Discord Registration Modal logic
+    // Discord Modal with Google Form
     const discordModal = document.getElementById('discordModal');
     const discordRegBtn = document.getElementById('discordRegBtn');
     const closeModal = document.querySelector('#discordModal .close-modal');
-    const discordForm = document.getElementById('discordRegForm');
-    const discordFormStatus = document.getElementById('discordFormStatus');
     const discordRegStatusDiv = document.getElementById('discordRegStatus');
 
     discordRegBtn.onclick = () => discordModal.style.display = 'block';
     closeModal.onclick = () => {
         discordModal.style.display = 'none';
-        discordForm.reset();
-        discordFormStatus.innerHTML = '';
+        // Optional: reload iframe to reset form
+        const iframe = document.querySelector('#discordModal .form-iframe');
+        iframe.src = iframe.src;
     };
     window.onclick = (e) => {
         if (e.target == discordModal) {
             discordModal.style.display = 'none';
-            discordForm.reset();
-            discordFormStatus.innerHTML = '';
+            const iframe = document.querySelector('#discordModal .form-iframe');
+            iframe.src = iframe.src;
         }
     };
 
-    discordForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const fullName = document.getElementById('fullName').value.trim();
-        const email = document.getElementById('emailReg').value.trim();
-        const discordUser = document.getElementById('discordUser').value.trim();
-        if (!fullName || !email || !discordUser) {
-            discordFormStatus.innerHTML = '❌ Please fill all required fields.';
-            return;
-        }
-
-        // Send data to Google Sheets
-        if (GOOGLE_SHEETS_WEBAPP_URL && GOOGLE_SHEETS_WEBAPP_URL !== "YOUR_GOOGLE_APPS_SCRIPT_URL") {
-            try {
-                const response = await fetch(GOOGLE_SHEETS_WEBAPP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', // because the script might be on a different domain
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ fullName, email, discordUser })
-                });
-                // Since 'no-cors' doesn't give response data, we assume success if no error
-                discordFormStatus.innerHTML = '✅ Registration saved to Google Sheets! You will receive an invite soon.';
-                discordRegStatusDiv.innerHTML = `✅ Registered: ${fullName} (${discordUser})`;
-                discordForm.reset();
-                setTimeout(() => {
-                    discordModal.style.display = 'none';
-                    discordFormStatus.innerHTML = '';
-                }, 2000);
-            } catch (err) {
-                console.error(err);
-                discordFormStatus.innerHTML = '❌ Failed to save. Please try again later.';
-            }
-        } else {
-            // Demo mode – just log
-            console.log('Discord Registration (demo):', { fullName, email, discordUser });
-            discordFormStatus.innerHTML = '✅ Demo: Registration received (configure Google Apps Script URL to save data).';
-            discordRegStatusDiv.innerHTML = `✅ Registered: ${fullName} (${discordUser})`;
-            discordForm.reset();
-            setTimeout(() => {
-                discordModal.style.display = 'none';
-                discordFormStatus.innerHTML = '';
-            }, 2000);
+    // Listen for message from Google Form (optional, to show confirmation)
+    window.addEventListener('message', (e) => {
+        if (e.data === 'formSubmitted') {
+            discordRegStatusDiv.innerHTML = '✅ Registration received! Check your email for Discord invite.';
+            setTimeout(() => discordModal.style.display = 'none', 2000);
         }
     });
 
@@ -301,7 +241,7 @@
     refreshBot.addEventListener('click', checkBot);
     checkBot();
 
-    console.log('Chess DAO: Twitter link updated, Discord form sends to Google Sheets (configure URL).');
+    console.log('Chess DAO: Google Form embedded for Discord registration.');
 </script>
 </body>
 </html>
